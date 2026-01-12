@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Admin Login - Book Your Trainer'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -174,6 +172,39 @@
     outline: none;
 }
 
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper .form-input {
+    padding-right: 50px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: var(--accent-green);
+}
+
+.password-toggle i {
+    font-size: 1.2rem;
+}
+
 .form-input:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent-green);
@@ -231,41 +262,8 @@
         font-size: 1.8rem;
     }
 }
-
-/* Password Toggle Styles */
-.password-input-wrapper {
-    position: relative;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #cccccc;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s ease;
-    z-index: 10;
-}
-
-.password-toggle:hover {
-    color: var(--accent-green);
-}
-
-.password-toggle i {
-    font-size: 1.2rem;
-}
-
-/* Icon visibility handled by JavaScript */
 </style>
 
-<?php $__env->startPush('scripts'); ?>
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
@@ -282,7 +280,6 @@ function togglePassword(inputId) {
     }
 }
 </script>
-<?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 
 

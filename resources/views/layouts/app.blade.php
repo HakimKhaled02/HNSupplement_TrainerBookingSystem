@@ -21,21 +21,13 @@
     @stack('styles')
 </head>
 <body>
-    @php
-        $isAuthPage = in_array(request()->route()->getName(), ['login', 'signup', 'trainer.signup', 'admin.login']);
-    @endphp
-    
-    @if(!$isAuthPage)
-        @include('components.navbar')
-    @endif
+    @include('components.navbar')
     
     <main class="main-content">
         @yield('content')
     </main>
     
-    @if(!$isAuthPage)
-        @include('components.footer')
-    @endif
+    @include('components.footer')
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

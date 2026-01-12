@@ -200,6 +200,10 @@
     outline: none;
 }
 
+.password-input-wrapper .form-input {
+    padding-right: 50px;
+}
+
 .form-input:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent-green);
@@ -389,17 +393,6 @@
     text-decoration: underline;
 }
 
-@media (max-width: 576px) {
-    .auth-card {
-        padding: 30px 20px;
-    }
-    
-    .auth-title {
-        font-size: 1.8rem;
-    }
-}
-
-/* Password Toggle Styles */
 .password-input-wrapper {
     position: relative;
 }
@@ -409,7 +402,7 @@
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: transparent;
     border: none;
     color: #cccccc;
     cursor: pointer;
@@ -417,7 +410,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     z-index: 10;
 }
 
@@ -429,10 +422,17 @@
     font-size: 1.2rem;
 }
 
-/* Icon visibility handled by JavaScript */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+    
+    .auth-title {
+        font-size: 1.8rem;
+    }
+}
 </style>
 
-@push('scripts')
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
@@ -449,6 +449,5 @@ function togglePassword(inputId) {
     }
 }
 </script>
-@endpush
 @endsection
 

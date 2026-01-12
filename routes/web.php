@@ -7,6 +7,16 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TrainerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/trainers', [HomeController::class, 'trainers'])->name('trainers');
+Route::get('/trainer/{id}/book', [HomeController::class, 'bookTrainer'])->name('trainer.book');
+Route::get('/trainer/{id}/check-availability', [HomeController::class, 'checkAvailability'])->name('trainer.check-availability');
+Route::get('/booking', function() {
+    return redirect()->route('trainers')->with('info', 'Please select a trainer to book.');
+})->name('booking.index');
+Route::post('/booking', [App\Http\Controllers\BookingController::class, 'store'])->name('booking.store')->middleware('auth');
+Route::get('/booking/{id}/payment', [App\Http\Controllers\BookingController::class, 'payment'])->name('booking.payment')->middleware('auth');
+Route::post('/booking/{id}/payment', [App\Http\Controllers\BookingController::class, 'processPayment'])->name('booking.payment.process')->middleware('auth');
+Route::get('/booking/{id}/success', [App\Http\Controllers\BookingController::class, 'success'])->name('booking.success')->middleware('auth');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -22,13 +32,21 @@ Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.logi
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/approvals', [AdminController::class, 'approvals'])->name('admin.approvals');
+    Route::get('/admin/trainers', [AdminController::class, 'trainers'])->name('admin.trainers');
     Route::post('/admin/trainer/{id}/approve', [AdminController::class, 'approveTrainer'])->name('admin.approve.trainer');
     Route::post('/admin/trainer/{id}/reject', [AdminController::class, 'rejectTrainer'])->name('admin.reject.trainer');
+    Route::post('/admin/trainer/{id}/update-salary', [AdminController::class, 'updateSalary'])->name('admin.trainer.update-salary');
 });
 
 // Trainer Routes
 Route::middleware('auth')->group(function () {
     Route::get('/trainer/dashboard', [TrainerController::class, 'dashboard'])->name('trainer.dashboard');
+    Route::get('/trainer/profile', [TrainerController::class, 'profile'])->name('trainer.profile');
+    Route::get('/trainer/profile/edit', [TrainerController::class, 'editProfile'])->name('trainer.profile.edit');
+    Route::post('/trainer/profile/update', [TrainerController::class, 'updateProfile'])->name('trainer.profile.update');
+    Route::get('/trainer/availability', [TrainerController::class, 'availability'])->name('trainer.availability');
+    Route::post('/trainer/availability/update', [TrainerController::class, 'updateAvailability'])->name('trainer.availability.update');
 });
 
 // Logout Route

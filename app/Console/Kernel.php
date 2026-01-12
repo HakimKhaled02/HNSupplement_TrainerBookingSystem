@@ -12,7 +12,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Cancel expired pending bookings every minute
+        $schedule->call(function () {
+            \App\Booking::where('payment_status', 'pending')
+                ->whereNotNull('payment_expires_at')
+                ->where('payment_expires_at', '<=', now())
+                ->update([
+                    'payment_status' => 'cancelled',
+                    'status' => 'cancelled'
+                ]);
+        })->everyMinute();
     }
 
     /**

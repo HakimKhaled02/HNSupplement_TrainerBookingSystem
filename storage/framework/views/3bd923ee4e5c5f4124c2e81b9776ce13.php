@@ -4,53 +4,15 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid px-0">
-    <!-- Hero Section with Background Image -->
-    <section class="hero-fullscreen">
-        <!-- Background Image -->
-        <div class="hero-background" style="background-image: url('<?php echo e(asset('images/homepage.jpg')); ?>');"></div>
-        
-        <!-- Hero Content -->
-        <div class="hero-content-wrapper">
-            <h1 class="hero-title-large">TRAINERS</h1>
+    <!-- Hero Section -->
+    <section class="hero-section" style="background-image: url('<?php echo e(asset('images/homepage.jpg')); ?>');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Book Your Perfect Trainer</h1>
             <p class="hero-description">
-                Book your perfect personal trainer and achieve your fitness goals.
+                Find certified personal trainers near you<br>and achieve your fitness goals with personalized training programs.
             </p>
-        </div>
-        
-        <!-- Search Form -->
-        <div class="search-form-container">
-            <form class="search-form" action="#" method="GET">
-                <div class="search-form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location" name="location" placeholder="City, Area...">
-                </div>
-                <div class="search-form-group">
-                    <label for="specialization">Specialization</label>
-                    <input type="text" id="specialization" name="specialization" placeholder="Strength, Cardio, Yoga...">
-                </div>
-                <div class="search-form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" placeholder="Select Date">
-                </div>
-                <div class="search-form-group">
-                    <label for="time">Time</label>
-                    <input type="time" id="time" name="time" placeholder="Select Time">
-                </div>
-                <button type="submit" class="search-button">Search</button>
-            </form>
-        </div>
-        
-        <!-- Social Icons - Right Side -->
-        <div class="social-sidebar">
-            <a href="#" class="social-sidebar-item">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="#" class="social-sidebar-item">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="#" class="social-sidebar-item">
-                <i class="bi bi-twitter"></i>
-            </a>
+            <a href="<?php echo e(route('login')); ?>" class="btn btn-primary btn-hero">Get Started</a>
         </div>
     </section>
 

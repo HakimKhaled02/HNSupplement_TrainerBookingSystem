@@ -88,6 +88,19 @@ class AdminController extends Controller
             return redirect()->route('admin.login')->with('error', 'Please login as admin to access the dashboard.');
         }
 
+        return view('admin.dashboard');
+    }
+
+    /**
+     * Show trainer approvals page.
+     */
+    public function approvals()
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            return redirect()->route('admin.login')->with('error', 'Please login as admin to access the approvals page.');
+        }
+
         $pendingTrainers = Trainer::where('status', 'pending')
             ->with('user')
             ->get();
@@ -96,7 +109,7 @@ class AdminController extends Controller
             ->with('user')
             ->get();
 
-        return view('admin.dashboard', compact('pendingTrainers', 'activeTrainers'));
+        return view('admin.approvals', compact('pendingTrainers', 'activeTrainers'));
     }
 
     /**
@@ -129,7 +142,7 @@ class AdminController extends Controller
         // Send email with login credentials
         Mail::to($trainer->user->email)->send(new TrainerApprovedMail($trainer->user, $temporaryPassword));
 
-        return back()->with('success', 'Trainer approved and email sent successfully!');
+        return redirect()->route('admin.approvals')->with('success', 'Trainer approved and email sent successfully!');
     }
 
     /**
@@ -155,6 +168,45 @@ class AdminController extends Controller
         // Send rejection email
         Mail::to($trainer->user->email)->send(new TrainerRejectedMail($trainer->user));
 
-        return back()->with('success', 'Trainer rejected and email sent successfully.');
+        return redirect()->route('admin.approvals')->with('success', 'Trainer rejected and email sent successfully.');
+    }
+
+    /**
+     * Show all approved trainers.
+     */
+    public function trainers()
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            return redirect()->route('admin.login')->with('error', 'Please login as admin to access the trainers page.');
+        }
+
+        $trainers = Trainer::where('status', 'active')
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.trainers', compact('trainers'));
+    }
+
+    /**
+     * Update trainer salary.
+     */
+    public function updateSalary(Request $request, $id)
+    {
+        // Check if user is staff
+        if (Auth::user()->role !== 'staff') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $request->validate([
+            'salary' => 'required|numeric|min:0|max:999999.99',
+        ]);
+
+        $trainer = Trainer::findOrFail($id);
+        $trainer->salary = $request->salary;
+        $trainer->save();
+
+        return redirect()->route('admin.trainers')->with('success', 'Trainer salary updated successfully.');
     }
 }

@@ -70,8 +70,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard');
             }
             
-            // Customer redirects to homepage
-            return redirect()->route('home');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
@@ -191,7 +190,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle user logout.
+     * Handle logout.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -201,8 +200,8 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect()->route('home');
+        
+        return redirect()->route('home')->with('success', 'You have been logged out successfully.');
     }
 }
 
