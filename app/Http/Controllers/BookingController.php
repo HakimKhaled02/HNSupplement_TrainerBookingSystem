@@ -66,20 +66,6 @@ class BookingController extends Controller
 
         // Check availability (exclude cancelled, refunded, and expired pending bookings)
         $bookings = Booking::where('trainer_id', $trainer->id)
-            ->where('payment_status', '!=', 'cancelled')
-            ->where('payment_status', '!=', 'refunded')
-            ->where(function($query) {
-                // Only include bookings that are paid OR pending but not expired
-                $query->where('payment_status', 'paid')
-                      ->orWhere(function($q) {
-                          // Pending bookings that haven't expired
-                          $q->where('payment_status', 'pending')
-                            ->where(function($subQ) {
-                                $subQ->whereNull('payment_expires_at')
-                                     ->orWhere('payment_expires_at', '>', Carbon::now());
-                            });
-                      });
-            })
             ->where(function($query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate->toDateString(), $endDate->toDateString()])
                       ->orWhereBetween('end_date', [$startDate->toDateString(), $endDate->toDateString()])
@@ -88,6 +74,21 @@ class BookingController extends Controller
                             ->where('end_date', '>=', $endDate->toDateString());
                       });
             })
+            ->where(function($query) {
+                // Only include bookings that are:
+                // 1. Paid (regardless of expiry)
+                // 2. Pending but NOT expired (payment_expires_at is null OR in the future)
+                $query->where('payment_status', 'paid')
+                      ->orWhere(function($q) {
+                          $q->where('payment_status', 'pending')
+                            ->where(function($subQ) {
+                                $subQ->whereNull('payment_expires_at')
+                                     ->orWhere('payment_expires_at', '>', Carbon::now());
+                            });
+                      });
+            })
+            ->where('payment_status', '!=', 'cancelled')
+            ->where('payment_status', '!=', 'refunded')
             ->get();
 
         // Check if any time slots are already booked
@@ -144,6 +145,18 @@ class BookingController extends Controller
         if ($booking->payment_status === 'paid') {
             return redirect()->route('booking.success', $booking->id)
                 ->with('info', 'This booking has already been paid.');
+        }
+
+        // Check if booking has expired and cancel it
+        if ($booking->payment_status === 'pending' && 
+            $booking->payment_expires_at && 
+            $booking->payment_expires_at <= Carbon::now()) {
+            $booking->update([
+                'payment_status' => 'cancelled',
+                'status' => 'cancelled'
+            ]);
+            return redirect()->route('trainers')
+                ->with('error', 'Your booking has expired. Please create a new booking.');
         }
 
         return view('bookings.payment', compact('booking'));

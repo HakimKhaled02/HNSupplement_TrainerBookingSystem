@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/trainers', [HomeController::class, 'trainers'])->name('trainers');
@@ -47,6 +48,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/trainer/profile/update', [TrainerController::class, 'updateProfile'])->name('trainer.profile.update');
     Route::get('/trainer/availability', [TrainerController::class, 'availability'])->name('trainer.availability');
     Route::post('/trainer/availability/update', [TrainerController::class, 'updateAvailability'])->name('trainer.availability.update');
+});
+
+// Customer Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::get('/customer/profile/edit', [CustomerController::class, 'editProfile'])->name('customer.profile.edit');
+    Route::post('/customer/profile/update', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
+    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
 });
 
 // Logout Route

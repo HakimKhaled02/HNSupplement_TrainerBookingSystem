@@ -15,10 +15,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="<?php echo e(route('home')); ?>">HOME</a>
+                    <a class="nav-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>" href="<?php echo e(route('home')); ?>">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo e(route('trainers')); ?>">TRAINERS</a>
+                    <a class="nav-link <?php echo e(request()->routeIs('trainers') ? 'active' : ''); ?>" href="<?php echo e(route('trainers')); ?>">TRAINERS</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">ABOUT</a>
@@ -34,6 +34,8 @@
                         $profilePicture = null;
                         if ($user->trainer && $user->trainer->profile_picture) {
                             $profilePicture = $user->trainer->profile_picture;
+                        } elseif ($user->customer && $user->customer->profile_picture) {
+                            $profilePicture = $user->customer->profile_picture;
                         }
                     ?>
                     <div class="dropdown profile-dropdown">
@@ -49,6 +51,11 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end profile-menu" aria-labelledby="profileDropdown">
                             <li>
+                                <a class="dropdown-item profile-menu-item" href="<?php echo e(route('home')); ?>">
+                                    <i class="bi bi-house me-2"></i>Home
+                                </a>
+                            </li>
+                            <li>
                                 <?php if($user->role === 'trainer'): ?>
                                     <a class="dropdown-item profile-menu-item" href="<?php echo e(route('trainer.dashboard')); ?>">
                                         <i class="bi bi-person-circle me-2"></i>Profile
@@ -58,8 +65,11 @@
                                         <i class="bi bi-person-circle me-2"></i>Profile
                                     </a>
                                 <?php else: ?>
-                                    <a class="dropdown-item profile-menu-item" href="#">
+                                    <a class="dropdown-item profile-menu-item" href="<?php echo e(route('customer.profile')); ?>">
                                         <i class="bi bi-person-circle me-2"></i>Profile
+                                    </a>
+                                    <a class="dropdown-item profile-menu-item" href="<?php echo e(route('customer.bookings')); ?>">
+                                        <i class="bi bi-calendar-check me-2"></i>My Bookings
                                     </a>
                                 <?php endif; ?>
                             </li>

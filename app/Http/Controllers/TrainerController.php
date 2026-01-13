@@ -173,12 +173,12 @@ class TrainerController extends Controller
             return redirect()->route('trainer.dashboard')->with('error', 'Trainer profile not found.');
         }
 
-        // Check if trainer has completed bookings
+        // Check if trainer has any incomplete bookings
         $hasCompletedBookings = $this->hasCompletedBookings($trainer);
         
         if (!$hasCompletedBookings) {
-            return redirect()->route('trainer.availability')
-                ->with('error', 'You can only set your availability after completing at least one booking appointment with a customer.');
+            return redirect()->route('trainer.dashboard')
+                ->with('error', 'You can only set your availability when all your bookings are fully completed. Please wait until all active bookings have ended.');
         }
 
         // Fixed 2-hour time slots
@@ -230,17 +230,23 @@ class TrainerController extends Controller
     }
 
     /**
-     * Check if trainer has completed bookings.
-     * TODO: Replace with actual database query when bookings table is created.
+     * Check if trainer has any incomplete bookings.
+     * Trainer can only set availability when all bookings are fully completed.
      */
     private function hasCompletedBookings($trainer)
     {
-        // For now, allow active trainers to set availability
-        // This should be replaced with actual bookings check:
-        // return Booking::where('trainer_id', $trainer->id)
-        //     ->where('status', 'completed')
-        //     ->exists();
-        
-        return $trainer && $trainer->status === 'active';
+        if (!$trainer) {
+            return false;
+        }
+
+        // Check if trainer has any active/incomplete bookings
+        // A booking is incomplete if it's paid and the end_date hasn't passed yet
+        $incompleteBookings = \App\Booking::where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->where('end_date', '>=', now()->toDateString())
+            ->exists();
+
+        // Trainer can set availability only if there are NO incomplete bookings
+        return !$incompleteBookings;
     }
 }

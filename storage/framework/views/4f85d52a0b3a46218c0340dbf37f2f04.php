@@ -39,8 +39,21 @@
                 <div class="sidebar-user">
                     <div class="sidebar-user-avatar">
                         <?php if(auth()->guard()->check()): ?>
-                            <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
+                            <?php
+                                $user = auth()->user();
+                                $profilePicture = null;
+                                if ($user->role === 'trainer' && $user->trainer && $user->trainer->profile_picture) {
+                                    $profilePicture = $user->trainer->profile_picture;
+                                } elseif ($user->role === 'customer' && $user->customer && $user->customer->profile_picture) {
+                                    $profilePicture = $user->customer->profile_picture;
+                                }
+                            ?>
+                            <?php if($profilePicture): ?>
+                                <img src="<?php echo e(asset('storage/' . $profilePicture)); ?>" alt="<?php echo e($user->name); ?>" class="sidebar-user-avatar-img">
+                            <?php else: ?>
+                                <?php echo e(strtoupper(substr($user->name, 0, 1))); ?>
 
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                     <div class="sidebar-user-info">

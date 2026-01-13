@@ -161,22 +161,11 @@ class HomeController extends Controller
             ]);
         }
         
+        // Cancel any expired pending bookings for this trainer (cleanup)
+        $this->cancelExpiredBookings($trainer->id);
+        
         // Get all bookings for this trainer in the date range (excluding cancelled/refunded/expired)
         $bookings = Booking::where('trainer_id', $trainer->id)
-            ->where('payment_status', '!=', 'cancelled')
-            ->where('payment_status', '!=', 'refunded')
-            ->where(function($query) {
-                // Only include bookings that are paid OR pending but not expired
-                $query->where('payment_status', 'paid')
-                      ->orWhere(function($q) {
-                          // Pending bookings that haven't expired
-                          $q->where('payment_status', 'pending')
-                            ->where(function($subQ) {
-                                $subQ->whereNull('payment_expires_at')
-                                     ->orWhere('payment_expires_at', '>', Carbon::now());
-                            });
-                      });
-            })
             ->where(function($query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate, $endDate])
                       ->orWhereBetween('end_date', [$startDate, $endDate])
@@ -185,6 +174,21 @@ class HomeController extends Controller
                             ->where('end_date', '>=', $endDate);
                       });
             })
+            ->where(function($query) {
+                // Only include bookings that are:
+                // 1. Paid (regardless of expiry)
+                // 2. Pending but NOT expired (payment_expires_at is null OR in the future)
+                $query->where('payment_status', 'paid')
+                      ->orWhere(function($q) {
+                          $q->where('payment_status', 'pending')
+                            ->where(function($subQ) {
+                                $subQ->whereNull('payment_expires_at')
+                                     ->orWhere('payment_expires_at', '>', Carbon::now());
+                            });
+                      });
+            })
+            ->where('payment_status', '!=', 'cancelled')
+            ->where('payment_status', '!=', 'refunded')
             ->get();
         
         // Build availability map: day => [time slots that are booked]
@@ -214,6 +218,24 @@ class HomeController extends Controller
             'available' => true,
             'booked_slots' => $bookedSlots
         ]);
+    }
+
+    /**
+     * Cancel expired pending bookings for a trainer.
+     *
+     * @param int $trainerId
+     * @return void
+     */
+    private function cancelExpiredBookings($trainerId)
+    {
+        Booking::where('trainer_id', $trainerId)
+            ->where('payment_status', 'pending')
+            ->whereNotNull('payment_expires_at')
+            ->where('payment_expires_at', '<=', Carbon::now())
+            ->update([
+                'payment_status' => 'cancelled',
+                'status' => 'cancelled'
+            ]);
     }
 
     /**

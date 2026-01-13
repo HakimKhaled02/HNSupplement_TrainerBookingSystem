@@ -138,6 +138,17 @@ p, span, a, li, label, input, button {
 .navbar {
     padding: 1rem 0;
     background-color: #000000 !important;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(0px);
+}
+
+/* Glassmorphism effect when scrolled */
+.navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 204, 102, 0.2);
 }
 
 .navbar-brand {
@@ -238,6 +249,22 @@ p, span, a, li, label, input, button {
     color: #000000 !important;
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(0, 204, 102, 0.5);
+}
+
+/* Navbar Home Link (for logged-in users) */
+.navbar-home-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+    text-decoration: none;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.navbar-home-link:hover {
+    color: var(--accent-green) !important;
 }
 
 /* Profile Dropdown Styles */
@@ -543,6 +570,14 @@ p, span, a, li, label, input, button {
     font-weight: 700;
     font-size: 1.2rem;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.sidebar-user-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .sidebar-user-info {
@@ -744,11 +779,18 @@ p, span, a, li, label, input, button {
     border: none;
 }
 
-.dashboard-btn-primary:hover {
+.dashboard-btn-primary:hover:not(:disabled) {
     background: var(--accent-green-light);
     color: #000;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 204, 102, 0.4);
+}
+
+.dashboard-btn-primary:disabled {
+    background: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 /* Dashboard Tables */
@@ -3490,6 +3532,1033 @@ p, span, a, li, label, input, button {
     
     .selected-days-count {
         margin-left: 0;
+        width: 100%;
+    }
+}
+
+/* Customer Profile Styles - Matching Payment Page Design */
+.customer-profile-page-container-new {
+    min-height: calc(100vh - 200px);
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+}
+
+.customer-profile-card-new {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+}
+
+.customer-profile-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.customer-profile-header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.customer-profile-avatar-wrapper-new {
+    flex-shrink: 0;
+}
+
+.customer-profile-avatar-new {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e0e0e0;
+}
+
+.customer-profile-avatar-placeholder-new {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a9eff, #3a8eef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    border: 3px solid #e0e0e0;
+}
+
+.customer-profile-header-info-new {
+    flex: 1;
+}
+
+.customer-profile-title-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.customer-profile-subtitle-new {
+    color: #666666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.customer-profile-edit-btn-new {
+    background: #4a9eff;
+    border: none;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.customer-profile-edit-btn-new:hover {
+    background: #3a8eef;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+    color: #ffffff;
+}
+
+.customer-profile-details-section-new {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.customer-profile-section-title-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+}
+
+.customer-profile-info-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.customer-profile-info-row-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.customer-profile-info-label-new {
+    color: #666666;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.customer-profile-info-value-new {
+    color: #000000;
+    font-size: 0.9rem;
+    text-align: right;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.customer-profile-link-new {
+    color: #4a9eff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: all 0.3s ease;
+}
+
+.customer-profile-link-new:hover {
+    color: #3a8eef;
+    text-decoration: underline;
+}
+
+.customer-edit-profile-page-container {
+    min-height: calc(100vh - 200px);
+    background-color: #000000;
+    padding-top: 6rem;
+}
+
+.customer-profile-card,
+.customer-edit-profile-card {
+    background: #1a1a1a;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Customer Profile Header Section - Matching Trainer Style */
+.customer-profile-header-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customer-profile-avatar-section {
+    flex-shrink: 0;
+}
+
+.customer-profile-avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(0, 204, 102, 0.3);
+}
+
+.customer-profile-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00cc66, #00a855);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ffffff;
+    border: 3px solid rgba(0, 204, 102, 0.3);
+}
+
+.customer-profile-header-info {
+    flex: 1;
+}
+
+.customer-profile-header-name {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+
+.customer-profile-header-email {
+    color: #cccccc;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.customer-profile-header-actions {
+    flex-shrink: 0;
+}
+
+.customer-profile-edit-btn {
+    background: #00cc66;
+    border: none;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.customer-profile-edit-btn:hover {
+    background: #00a855;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 204, 102, 0.3);
+}
+
+/* Customer Profile Details Section - Matching Trainer Style */
+.customer-profile-details-section {
+    margin-top: 2rem;
+}
+
+.customer-profile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.customer-profile-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.customer-profile-detail-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 204, 102, 0.3);
+}
+
+.customer-profile-detail-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #cccccc;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.customer-profile-detail-label i {
+    color: #00cc66;
+    font-size: 1.1rem;
+}
+
+.customer-profile-detail-value {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.customer-profile-link {
+    color: #00cc66;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.customer-profile-link:hover {
+    color: #00a855;
+    text-decoration: underline;
+}
+
+/* Customer Edit Profile Styles - Matching Payment Page Style */
+.customer-edit-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customer-edit-profile-title {
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.customer-edit-profile-back-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.customer-edit-profile-back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.customer-bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.customer-booking-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.booking-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.booking-item-trainer {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+
+.booking-item-date {
+    color: #cccccc;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.booking-status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.booking-status-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.booking-status-paid {
+    background: rgba(0, 204, 102, 0.2);
+    color: #00cc66;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+}
+
+.booking-status-cancelled {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.booking-status-refunded {
+    background: rgba(108, 117, 125, 0.2);
+    color: #6c757d;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.booking-item-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.booking-detail-item {
+    display: flex;
+    align-items: center;
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+.booking-detail-item i {
+    color: #00cc66;
+    margin-right: 0.5rem;
+}
+
+/* Customer Form Styles - Matching Payment Page Style */
+.customer-edit-profile-form {
+    margin-top: 2rem;
+}
+
+.customer-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.customer-form-label {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.customer-form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.customer-form-input:focus {
+    outline: none;
+    border-color: #00cc66;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(0, 204, 102, 0.1);
+}
+
+.customer-form-input::placeholder {
+    color: #6c757d;
+}
+
+.customer-form-help-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.customer-form-help-text a {
+    color: #00cc66;
+    text-decoration: none;
+}
+
+.customer-form-help-text a:hover {
+    text-decoration: underline;
+}
+
+.customer-image-preview {
+    margin-top: 1rem;
+}
+
+.customer-image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 204, 102, 0.3);
+}
+
+.customer-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customer-form-cancel-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.customer-form-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.customer-form-submit-btn {
+    background: #00cc66;
+    border: none;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.customer-form-submit-btn:hover {
+    background: #00a855;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 204, 102, 0.3);
+}
+
+/* Customer Bookings Page Styles - Matching Payment Page Design */
+.customer-bookings-page-container {
+    min-height: calc(100vh - 200px);
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+}
+
+.customer-bookings-page-title {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.customer-booking-card-new {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.customer-booking-card-new:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.booking-card-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.booking-trainer-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.booking-trainer-image-wrapper {
+    flex-shrink: 0;
+}
+
+.booking-trainer-image-new {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+}
+
+.booking-trainer-placeholder-new {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a9eff, #3a8eef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    border: 2px solid #e0e0e0;
+}
+
+.booking-trainer-info-new {
+    flex: 1;
+}
+
+.booking-trainer-name-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.booking-id-new {
+    color: #666666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.booking-status-badge-new {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+}
+
+.booking-status-pending-new {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.booking-status-paid-new {
+    background: rgba(74, 158, 255, 0.1);
+    color: #4a9eff;
+    border: 1px solid rgba(74, 158, 255, 0.3);
+}
+
+.booking-status-cancelled-new {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.booking-status-refunded-new {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.booking-card-body-new {
+    margin-bottom: 1rem;
+}
+
+.booking-details-section-new {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e0e0e0;
+}
+
+.booking-section-title-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.booking-info-grid-new {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.booking-info-item-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.booking-info-label-new {
+    color: #666666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.booking-info-value-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.booking-amount-new {
+    color: #4a9eff;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.booking-schedule-section-new {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+}
+
+.booking-schedule-content-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.booking-days-display-new,
+.booking-times-display-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.booking-days-label-new,
+.booking-times-label-new {
+    color: #666666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.booking-days-badges-new {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.booking-day-badge-new {
+    padding: 0.3rem 0.7rem;
+    background: rgba(74, 158, 255, 0.1);
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 20px;
+    color: #4a9eff;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+}
+
+.booking-times-list-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.booking-time-item-new {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.booking-time-item-new:last-child {
+    border-bottom: none;
+}
+
+.booking-card-footer-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.booking-footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.booking-action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.booking-action-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.booking-refund-btn {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.booking-refund-btn:hover {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    transform: translateY(-1px);
+}
+
+.booking-reminder-btn {
+    background: rgba(138, 43, 226, 0.1);
+    color: #8a2be2;
+}
+
+.booking-reminder-btn:hover {
+    background: rgba(138, 43, 226, 0.2);
+    color: #8a2be2;
+    transform: translateY(-1px);
+}
+
+.booking-attendance-btn {
+    background: rgba(74, 158, 255, 0.1);
+    color: #4a9eff;
+}
+
+.booking-attendance-btn:hover {
+    background: rgba(74, 158, 255, 0.2);
+    color: #4a9eff;
+    transform: translateY(-1px);
+}
+
+.booking-feedback-rating-btn {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.booking-feedback-rating-btn:hover {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    transform: translateY(-1px);
+}
+
+.booking-date-new {
+    color: #999999;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+}
+
+.booking-expiry-new {
+    color: #ffc107;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+}
+
+.customer-no-bookings-new {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .booking-card-header-new {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .booking-info-grid-new {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-card-footer-new {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.customer-booking-card {
+    background: #1a1a1a;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.customer-booking-card:hover {
+    border-color: rgba(0, 204, 102, 0.5);
+    box-shadow: 0 5px 20px rgba(0, 204, 102, 0.1);
+}
+
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-card-trainer {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+
+.booking-card-id {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.booking-card-body {
+    margin-bottom: 1rem;
+}
+
+.booking-info-item {
+    display: flex;
+    align-items: flex-start;
+    color: #cccccc;
+    font-size: 0.95rem;
+}
+
+.booking-info-item i {
+    color: #00cc66;
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+    margin-top: 0.2rem;
+}
+
+.booking-days-section,
+.booking-time-slots-section {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.booking-days-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.booking-day-badge {
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 204, 102, 0.2);
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    border-radius: 20px;
+    color: #00cc66;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.booking-time-slots-list {
+    margin-top: 0.75rem;
+}
+
+.booking-time-slot-item {
+    padding: 0.5rem 0;
+    color: #cccccc;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.booking-time-slot-item:last-child {
+    border-bottom: none;
+}
+
+.booking-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customer-no-bookings {
+    background: #1a1a1a;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    border-radius: 15px;
+    padding: 3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .customer-profile-header-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .customer-profile-header-actions {
+        width: 100%;
+    }
+
+    .customer-profile-edit-btn {
+        width: 100%;
+    }
+
+    .customer-edit-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .customer-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .booking-item-header,
+    .booking-card-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .customer-form-actions {
+        flex-direction: column;
+    }
+
+    .customer-form-actions .btn {
         width: 100%;
     }
 }

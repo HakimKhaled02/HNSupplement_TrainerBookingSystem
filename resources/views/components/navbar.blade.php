@@ -15,10 +15,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('home') }}">HOME</a>
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('trainers') }}">TRAINERS</a>
+                    <a class="nav-link {{ request()->routeIs('trainers') ? 'active' : '' }}" href="{{ route('trainers') }}">TRAINERS</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">ABOUT</a>
@@ -34,6 +34,8 @@
                         $profilePicture = null;
                         if ($user->trainer && $user->trainer->profile_picture) {
                             $profilePicture = $user->trainer->profile_picture;
+                        } elseif ($user->customer && $user->customer->profile_picture) {
+                            $profilePicture = $user->customer->profile_picture;
                         }
                     @endphp
                     <div class="dropdown profile-dropdown">
@@ -48,6 +50,11 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end profile-menu" aria-labelledby="profileDropdown">
                             <li>
+                                <a class="dropdown-item profile-menu-item" href="{{ route('home') }}">
+                                    <i class="bi bi-house me-2"></i>Home
+                                </a>
+                            </li>
+                            <li>
                                 @if($user->role === 'trainer')
                                     <a class="dropdown-item profile-menu-item" href="{{ route('trainer.dashboard') }}">
                                         <i class="bi bi-person-circle me-2"></i>Profile
@@ -57,8 +64,11 @@
                                         <i class="bi bi-person-circle me-2"></i>Profile
                                     </a>
                                 @else
-                                    <a class="dropdown-item profile-menu-item" href="#">
+                                    <a class="dropdown-item profile-menu-item" href="{{ route('customer.profile') }}">
                                         <i class="bi bi-person-circle me-2"></i>Profile
+                                    </a>
+                                    <a class="dropdown-item profile-menu-item" href="{{ route('customer.bookings') }}">
+                                        <i class="bi bi-calendar-check me-2"></i>My Bookings
                                     </a>
                                 @endif
                             </li>

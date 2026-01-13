@@ -36,6 +36,17 @@
                                 <span class="payment-info-value"><?php echo e($booking->trainer->user->name); ?></span>
                             </div>
                             <div class="payment-info-row">
+                                <span class="payment-info-label">Category:</span>
+                                <span class="payment-info-value"><?php echo e(ucfirst(str_replace('_', ' ', $booking->trainer->category ?? 'N/A'))); ?></span>
+                            </div>
+                            <div class="payment-info-row">
+                                <span class="payment-info-label">Location:</span>
+                                <span class="payment-info-value">
+                                    <?php echo e($booking->trainer->area ?? 'N/A'); ?>, <?php echo e(ucfirst(str_replace('_', ' ', $booking->trainer->state ?? 'N/A'))); ?>
+
+                                </span>
+                            </div>
+                            <div class="payment-info-row">
                                 <span class="payment-info-label">Period:</span>
                                 <span class="payment-info-value">
                                     <?php echo e(\Carbon\Carbon::parse($booking->start_date)->format('M d, Y')); ?> - 

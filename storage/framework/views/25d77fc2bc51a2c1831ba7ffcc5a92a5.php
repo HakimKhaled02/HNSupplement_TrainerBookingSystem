@@ -13,7 +13,7 @@
     <?php if(!$hasCompletedBookings): ?>
         <div class="alert alert-warning availability-alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong>Notice:</strong> You can only set your availability after completing at least one booking appointment with a customer.
+            <strong>Notice:</strong> You can only set your availability when all your bookings are fully completed. Please wait until all active bookings have ended.
         </div>
     <?php endif; ?>
 
@@ -158,8 +158,10 @@
                     <button type="submit" 
                             class="btn dashboard-btn-primary" 
                             id="save-availability-btn"
-                            <?php echo e(!$hasCompletedBookings ? 'disabled' : ''); ?>>
-                        <i class="bi bi-check-circle me-2"></i>Save Availability
+                            <?php echo e(!$hasCompletedBookings ? 'disabled' : ''); ?>
+
+                            <?php if(!$hasCompletedBookings): ?> title="You can only set availability when all bookings are fully completed" <?php endif; ?>>
+                        <i class="bi bi-check-circle me-2"></i>Set Availability
                     </button>
                 </div>
             </form>

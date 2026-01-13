@@ -39,7 +39,20 @@
                 <div class="sidebar-user">
                     <div class="sidebar-user-avatar">
                         @auth
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            @php
+                                $user = auth()->user();
+                                $profilePicture = null;
+                                if ($user->role === 'trainer' && $user->trainer && $user->trainer->profile_picture) {
+                                    $profilePicture = $user->trainer->profile_picture;
+                                } elseif ($user->role === 'customer' && $user->customer && $user->customer->profile_picture) {
+                                    $profilePicture = $user->customer->profile_picture;
+                                }
+                            @endphp
+                            @if($profilePicture)
+                                <img src="{{ asset('storage/' . $profilePicture) }}" alt="{{ $user->name }}" class="sidebar-user-avatar-img">
+                            @else
+                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                            @endif
                         @endauth
                     </div>
                     <div class="sidebar-user-info">
