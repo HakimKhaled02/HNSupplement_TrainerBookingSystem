@@ -200,6 +200,10 @@
     outline: none;
 }
 
+.password-input-wrapper .form-input {
+    padding-right: 50px;
+}
+
 .form-input:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent-green);

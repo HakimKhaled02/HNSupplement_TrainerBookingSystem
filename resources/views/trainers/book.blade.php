@@ -62,10 +62,46 @@
                         <i class="bi bi-star me-2"></i>Reviews & Feedback
                     </h3>
                     <div class="booking-reviews-content">
-                        <div class="booking-no-reviews">
-                            <i class="bi bi-chat-left-text"></i>
-                            <p>No reviews yet. Be the first to book and review!</p>
-                        </div>
+                        @if(isset($reviews) && $reviews->count() > 0)
+                            <div class="booking-reviews-list">
+                                @foreach($reviews as $review)
+                                <div class="booking-review-item">
+                                    <div class="booking-review-header">
+                                        <div class="booking-review-user">
+                                            <div class="booking-review-avatar">
+                                                @if($review->user->customer && $review->user->customer->profile_picture)
+                                                    <img src="{{ asset('storage/' . $review->user->customer->profile_picture) }}" 
+                                                         alt="{{ $review->user->name }}" 
+                                                         class="booking-review-avatar-img">
+                                                @else
+                                                    <div class="booking-review-avatar-placeholder">
+                                                        {{ strtoupper(substr($review->user->name, 0, 1)) }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="booking-review-user-info">
+                                                <h5 class="booking-review-user-name">{{ $review->user->name }}</h5>
+                                                <p class="booking-review-date">{{ $review->created_at->format('M d, Y') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="booking-review-rating">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <i class="bi bi-star-fill {{ $i <= $review->rating ? 'star-filled' : 'star-empty' }}"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    <div class="booking-review-feedback">
+                                        <p>{{ $review->feedback }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="booking-no-reviews">
+                                <i class="bi bi-chat-left-text"></i>
+                                <p>No reviews yet. Be the first to book and review!</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

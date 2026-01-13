@@ -1735,6 +1735,171 @@ p, span, a, li, label, input, button {
     color: #ffffff;
 }
 
+.trainers-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.trainers-location-control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.btn-location-detect {
+    background: var(--accent-green);
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-location-detect:hover:not(:disabled) {
+    background: var(--accent-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 204, 102, 0.3);
+}
+
+.btn-location-detect:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.location-status-text {
+    font-size: 0.85rem;
+    color: #666666;
+    font-family: 'Poppins', sans-serif;
+}
+
+.trainers-radius-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.trainers-sort-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sort-label {
+    font-size: 0.9rem;
+    color: #333333;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+}
+
+.sort-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.sort-select:hover {
+    border-color: var(--accent-green);
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(0, 204, 102, 0.1);
+}
+
+.radius-label {
+    font-size: 0.9rem;
+    color: #333333;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+}
+
+.radius-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.radius-select:hover {
+    border-color: var(--accent-green);
+}
+
+.radius-select:focus {
+    outline: none;
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(0, 204, 102, 0.1);
+}
+
+.location-active-badge {
+    background: rgba(0, 204, 102, 0.1);
+    color: var(--accent-green);
+    padding: 0.3rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+}
+
+.trainer-card-distance {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    white-space: nowrap;
+    align-self: flex-end;
+    margin-bottom: 0;
+}
+
+.trainer-distance-badge {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
 .trainers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1891,11 +2056,18 @@ p, span, a, li, label, input, button {
 
 .trainer-card-price {
     display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
     margin-bottom: 0.5rem;
     padding-top: 0.5rem;
     border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.trainer-card-price-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
 }
 
 .trainer-card-price-label {
@@ -2193,6 +2365,107 @@ p, span, a, li, label, input, button {
     font-family: 'Poppins', sans-serif;
     font-size: 0.9rem;
     margin: 0;
+}
+
+.booking-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.booking-review-item {
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.booking-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.booking-review-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.booking-review-avatar {
+    flex-shrink: 0;
+}
+
+.booking-review-avatar-img,
+.booking-review-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.booking-review-avatar-img {
+    object-fit: cover;
+    border: 2px solid rgba(0, 204, 102, 0.2);
+}
+
+.booking-review-avatar-placeholder {
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid rgba(0, 204, 102, 0.2);
+}
+
+.booking-review-user-info {
+    flex: 1;
+}
+
+.booking-review-user-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 0.25rem 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.booking-review-date {
+    font-size: 0.8rem;
+    color: #666666;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.booking-review-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.booking-review-rating .bi-star-fill {
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.booking-review-rating .bi-star-fill.star-filled {
+    color: #ffc107;
+}
+
+.booking-review-feedback {
+    margin-top: 0.5rem;
+}
+
+.booking-review-feedback p {
+    font-size: 0.9rem;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .booking-form-card {
@@ -5455,4 +5728,125 @@ p, span, a, li, label, input, button {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Reviews Section Styles */
+.profile-reviews-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.review-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.review-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.review-user-avatar {
+    flex-shrink: 0;
+}
+
+.review-avatar-img,
+.review-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.review-avatar-img {
+    object-fit: cover;
+    border: 2px solid rgba(0, 204, 102, 0.2);
+}
+
+.review-avatar-placeholder {
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid rgba(0, 204, 102, 0.2);
+}
+
+.review-user-details {
+    flex: 1;
+}
+
+.review-user-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 0.25rem 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: #666666;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.review-rating .bi-star-fill {
+    font-size: 1rem;
+    color: #ddd;
+}
+
+.review-rating .bi-star-fill.star-filled {
+    color: #ffc107;
+}
+
+.review-rating-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-feedback {
+    margin-top: 0.5rem;
+}
+
+.review-feedback p {
+    font-size: 0.9rem;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-booking-info {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }

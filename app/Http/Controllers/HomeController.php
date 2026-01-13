@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Trainer;
 use App\User;
 use App\Booking;
+use App\Review;
 use Carbon\Carbon;
 
 class HomeController extends Controller
@@ -65,16 +66,51 @@ class HomeController extends Controller
             return $this->hasEnoughAvailability($trainer);
         });
 
-        // Paginate manually
+        // Calculate distances and filter by radius if user location is provided
+        $userLat = $request->input('user_lat');
+        $userLng = $request->input('user_lng');
+        $radius = $request->input('radius'); // Radius in km
+
+        if ($userLat && $userLng) {
+            // Calculate distance for each trainer and filter by radius
+            $trainers = $trainers->map(function($trainer) use ($userLat, $userLng) {
+                $trainer->distance = $trainer->calculateDistance($userLat, $userLng);
+                return $trainer;
+            });
+
+            // Filter by radius if specified
+            if ($radius && is_numeric($radius)) {
+                $trainers = $trainers->filter(function($trainer) use ($radius) {
+                    return $trainer->distance !== null && $trainer->distance <= $radius;
+                });
+            }
+
+            // Sort by distance (nearest first) when location is detected
+            $trainers = $trainers->sortBy(function($trainer) {
+                // Put trainers without coordinates at the end
+                return $trainer->distance ?? 999999;
+            })->values();
+        } else {
+            // Default sort by rating when no location
+            $trainers = $trainers->sortByDesc('rating')->values();
+        }
+
+        // Paginate manually - preserve all query parameters
         $perPage = 12;
         $currentPage = $request->get('page', 1);
         $items = $trainers->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        
+        // Build query string with all filters preserved
+        $queryParams = $request->except('page');
         $trainers = new \Illuminate\Pagination\LengthAwarePaginator(
             $items,
             $trainers->count(),
             $perPage,
             $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
+            [
+                'path' => $request->url(),
+                'query' => $queryParams
+            ]
         );
 
         // Get unique values for filters
@@ -92,7 +128,7 @@ class HomeController extends Controller
             ->sort()
             ->values();
 
-        return view('trainers.index', compact('trainers', 'categories', 'states'));
+        return view('trainers.index', compact('trainers', 'categories', 'states', 'userLat', 'userLng', 'radius'));
     }
 
     /**
@@ -104,6 +140,12 @@ class HomeController extends Controller
     public function bookTrainer($id)
     {
         $trainer = Trainer::with('user')->where('id', $id)->where('status', 'active')->firstOrFail();
+        
+        // Load reviews for this trainer
+        $reviews = Review::where('trainer_id', $trainer->id)
+            ->with(['user', 'booking'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         
         // Get unique days from availability
         $availableDays = [];
@@ -137,7 +179,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('trainers.book', compact('trainer', 'availableDays'));
+        return view('trainers.book', compact('trainer', 'availableDays', 'reviews'));
     }
 
     /**

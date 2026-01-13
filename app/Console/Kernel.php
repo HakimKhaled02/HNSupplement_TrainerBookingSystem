@@ -22,6 +22,9 @@ class Kernel extends ConsoleKernel
                     'status' => 'cancelled'
                 ]);
         })->everyMinute();
+
+        // Send reminder notifications every minute
+        $schedule->command('reminders:send')->everyMinute();
     }
 
     /**

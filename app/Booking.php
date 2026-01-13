@@ -51,6 +51,22 @@ class Booking extends Model
     }
 
     /**
+     * Get the review for this booking.
+     */
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    /**
+     * Get all reminders for this booking.
+     */
+    public function reminders()
+    {
+        return $this->hasMany(Reminder::class);
+    }
+
+    /**
      * Calculate and update progress based on attendance.
      */
     public function calculateProgress()

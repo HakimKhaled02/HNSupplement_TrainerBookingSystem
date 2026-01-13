@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Booking;
+use App\Review;
 
 class TrainerController extends Controller
 {
@@ -67,7 +68,16 @@ class TrainerController extends Controller
             return view('trainer.pending');
         }
 
-        return view('trainer.profile', compact('trainer'));
+        // Load reviews with user information
+        $reviews = [];
+        if ($trainer) {
+            $reviews = Review::where('trainer_id', $trainer->id)
+                ->with(['user', 'booking'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return view('trainer.profile', compact('trainer', 'reviews'));
     }
 
     /**

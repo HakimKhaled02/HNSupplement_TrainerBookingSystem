@@ -94,6 +94,8 @@
                                                         @php
                                                             $progress = $booking->progress ?? $booking->calculateProgress();
                                                             $isCompleted = $progress === 'completed';
+                                                            $isUpcomingOrOngoing = in_array($progress, ['upcoming', 'ongoing']);
+                                                            $hasReview = $booking->review ?? false;
                                                         @endphp
                                                         <button type="button" 
                                                                 class="btn btn-sm btn-primary" 
@@ -103,23 +105,24 @@
                                                             <i class="bi bi-check-circle"></i> Attendance
                                                         </button>
                                                         <button type="button" 
-                                                                class="btn btn-sm btn-info" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#reminderModal{{ $booking->id }}"
-                                                                title="Set Reminder">
+                                                                class="btn btn-sm btn-info {{ !$isUpcomingOrOngoing ? 'disabled' : '' }}" 
+                                                                @if(!$isUpcomingOrOngoing) disabled @else data-bs-toggle="modal" data-bs-target="#reminderModal{{ $booking->id }}" @endif
+                                                                title="{{ $isUpcomingOrOngoing ? 'Set Reminder' : 'Reminder only available for upcoming or ongoing bookings' }}">
                                                             <i class="bi bi-bell"></i> Reminder
                                                         </button>
                                                         <button type="button" 
-                                                                class="btn btn-sm btn-warning {{ !$isCompleted ? 'disabled' : '' }}" 
-                                                                @if(!$isCompleted) disabled @else data-bs-toggle="modal" data-bs-target="#feedbackModal{{ $booking->id }}" @endif
-                                                                title="{{ $isCompleted ? 'Leave Feedback & Rating' : 'Complete all sessions to leave feedback' }}">
+                                                                class="btn btn-sm btn-warning {{ !$isCompleted || $hasReview ? 'disabled' : '' }}" 
+                                                                @if(!$isCompleted || $hasReview) disabled @else data-bs-toggle="modal" data-bs-target="#feedbackModal{{ $booking->id }}" @endif
+                                                                title="{{ $hasReview ? 'Feedback already submitted' : ($isCompleted ? 'Leave Feedback & Rating' : 'Complete all sessions to leave feedback') }}">
                                                             <i class="bi bi-star"></i> Feedback
+                                                            @if($hasReview)
+                                                                <i class="bi bi-check-circle ms-1"></i>
+                                                            @endif
                                                         </button>
                                                         <button type="button" 
-                                                                class="btn btn-sm btn-danger" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#refundModal{{ $booking->id }}"
-                                                                title="Request Refund">
+                                                                class="btn btn-sm btn-danger {{ !$isUpcomingOrOngoing ? 'disabled' : '' }}" 
+                                                                @if(!$isUpcomingOrOngoing) disabled @else data-bs-toggle="modal" data-bs-target="#refundModal{{ $booking->id }}" @endif
+                                                                title="{{ $isUpcomingOrOngoing ? 'Request Refund' : 'Refund only available for upcoming or ongoing bookings' }}">
                                                             <i class="bi bi-arrow-counterclockwise"></i> Refund
                                                         </button>
                                                     @endif
@@ -242,6 +245,28 @@
                                                                 <p class="mb-1"><strong>Trainer:</strong> {{ $booking->trainer->user->name }}</p>
                                                                 <p class="mb-2"><strong>Period:</strong> {{ \Carbon\Carbon::parse($booking->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($booking->end_date)->format('M d, Y') }}</p>
                                                             </div>
+                                                            
+                                                            @if($booking->reminders && $booking->reminders->count() > 0)
+                                                            <div class="mb-3" style="background: #f0f8ff; padding: 0.75rem; border-radius: 6px; border-left: 3px solid #17a2b8;">
+                                                                <strong style="font-size: 0.85rem; color: #17a2b8;">Existing Reminders:</strong>
+                                                                <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem; font-size: 0.8rem;">
+                                                                    @foreach($booking->reminders->sortBy('reminder_date') as $reminder)
+                                                                    <li style="margin-bottom: 0.5rem;">
+                                                                        <strong>{{ \Carbon\Carbon::parse($reminder->reminder_date)->format('M d, Y \a\t g:i A') }}</strong>
+                                                                        @if($reminder->sent)
+                                                                            <span class="badge bg-success" style="font-size: 0.7rem; margin-left: 0.5rem;">Sent</span>
+                                                                        @else
+                                                                            <span class="badge bg-warning text-dark" style="font-size: 0.7rem; margin-left: 0.5rem;">Pending</span>
+                                                                        @endif
+                                                                        @if($reminder->note)
+                                                                            <br><small style="color: #666;">{{ $reminder->note }}</small>
+                                                                        @endif
+                                                                    </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                            @endif
+                                                            
                                                             <div class="mb-3">
                                                                 <label for="reminder_date{{ $booking->id }}" class="form-label">Reminder Date & Time</label>
                                                                 <input type="datetime-local" 

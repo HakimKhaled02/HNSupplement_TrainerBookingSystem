@@ -46,7 +46,20 @@
                             <?php if($trainer->salary): ?>
                                 <div class="booking-detail-item booking-salary">
                                     <i class="bi bi-wallet2"></i>
-                                    <span>RM <?php echo e(number_format($trainer->salary, 0)); ?>/month</span>
+                                    <span class="booking-salary-text">RM <?php echo e(number_format($trainer->salary, 0)); ?>/month</span>
+                                    <?php if(isset($distance) && $distance !== null): ?>
+                                        <span class="booking-distance-badge">
+                                            <i class="bi bi-signpost-2 me-1"></i><?php echo e($distance); ?> km away
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            <?php elseif(isset($distance) && $distance !== null): ?>
+                                <div class="booking-detail-item booking-salary">
+                                    <i class="bi bi-wallet2"></i>
+                                    <span class="booking-salary-text"></span>
+                                    <span class="booking-distance-badge">
+                                        <i class="bi bi-signpost-2 me-1"></i><?php echo e($distance); ?> km away
+                                    </span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -63,10 +76,47 @@
                         <i class="bi bi-star me-2"></i>Reviews & Feedback
                     </h3>
                     <div class="booking-reviews-content">
-                        <div class="booking-no-reviews">
-                            <i class="bi bi-chat-left-text"></i>
-                            <p>No reviews yet. Be the first to book and review!</p>
-                        </div>
+                        <?php if(isset($reviews) && $reviews->count() > 0): ?>
+                            <div class="booking-reviews-list">
+                                <?php $__currentLoopData = $reviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $review): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="booking-review-item">
+                                    <div class="booking-review-header">
+                                        <div class="booking-review-user">
+                                            <div class="booking-review-avatar">
+                                                <?php if($review->user->customer && $review->user->customer->profile_picture): ?>
+                                                    <img src="<?php echo e(asset('storage/' . $review->user->customer->profile_picture)); ?>" 
+                                                         alt="<?php echo e($review->user->name); ?>" 
+                                                         class="booking-review-avatar-img">
+                                                <?php else: ?>
+                                                    <div class="booking-review-avatar-placeholder">
+                                                        <?php echo e(strtoupper(substr($review->user->name, 0, 1))); ?>
+
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="booking-review-user-info">
+                                                <h5 class="booking-review-user-name"><?php echo e($review->user->name); ?></h5>
+                                                <p class="booking-review-date"><?php echo e($review->created_at->format('M d, Y')); ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="booking-review-rating">
+                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                <i class="bi bi-star-fill <?php echo e($i <= $review->rating ? 'star-filled' : 'star-empty'); ?>"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
+                                    <div class="booking-review-feedback">
+                                        <p><?php echo e($review->feedback); ?></p>
+                                    </div>
+                                </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="booking-no-reviews">
+                                <i class="bi bi-chat-left-text"></i>
+                                <p>No reviews yet. Be the first to book and review!</p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

@@ -13,13 +13,22 @@
                         <h3 class="trainers-filters-title">
                             <i class="bi bi-funnel me-2"></i>Filters
                         </h3>
-                        @if(request()->anyFilled(['category', 'state', 'area', 'availability_day', 'min_rating']))
+                        @if(request()->anyFilled(['category', 'state', 'area', 'availability_day', 'min_rating', 'user_lat', 'user_lng', 'radius']))
                             <a href="{{ route('trainers') }}" class="trainers-clear-filters">
-                                <i class="bi bi-x-circle me-1"></i>Clear
+                                <i class="bi bi-x-circle me-1"></i>Clear All
                             </a>
                         @endif
                     </div>
                     <form method="GET" action="{{ route('trainers') }}" class="trainers-filters-form">
+                        <!-- Preserve location and radius when applying filters -->
+                        @if(isset($userLat) && isset($userLng))
+                            <input type="hidden" name="user_lat" value="{{ $userLat }}">
+                            <input type="hidden" name="user_lng" value="{{ $userLng }}">
+                        @endif
+                        @if(isset($radius) && $radius)
+                            <input type="hidden" name="radius" value="{{ $radius }}">
+                        @endif
+                        
                         <div class="filter-group">
                             <label class="filter-label">Category</label>
                             <select name="category" class="filter-select">
@@ -82,9 +91,38 @@
 
             <!-- Trainers Content -->
             <div class="trainers-content-area">
+                <!-- Location & Radius Controls -->
+                <div class="trainers-controls-bar">
+                    <div class="trainers-location-control">
+                        <button type="button" id="get-user-location" class="btn-location-detect">
+                            <i class="bi bi-geo-alt-fill me-2"></i>Find Nearest Trainer
+                        </button>
+                        <span id="location-status" class="location-status-text"></span>
+                        <input type="hidden" id="user-latitude" name="user_lat" value="{{ $userLat ?? '' }}">
+                        <input type="hidden" id="user-longitude" name="user_lng" value="{{ $userLng ?? '' }}">
+                    </div>
+                    @if(isset($userLat) && isset($userLng))
+                    <div class="trainers-radius-control">
+                        <label for="radius-filter" class="radius-label">Search Radius:</label>
+                        <select id="radius-filter" name="radius" class="radius-select" onchange="updateRadius()">
+                            <option value="">All Distance</option>
+                            <option value="5" {{ ($radius ?? '') == '5' ? 'selected' : '' }}>5 km</option>
+                            <option value="10" {{ ($radius ?? '') == '10' ? 'selected' : '' }}>10 km</option>
+                            <option value="30" {{ ($radius ?? '') == '30' ? 'selected' : '' }}>30 km</option>
+                            <option value="50" {{ ($radius ?? '') == '50' ? 'selected' : '' }}>50 km</option>
+                        </select>
+                    </div>
+                    @endif
+                </div>
+
                 <!-- Results Count -->
                 <div class="trainers-results-count">
                     <span>Found <strong>{{ $trainers->total() }}</strong> trainer{{ $trainers->total() !== 1 ? 's' : '' }}</span>
+                    @if(isset($userLat) && isset($userLng))
+                        <span class="location-active-badge">
+                            <i class="bi bi-check-circle me-1"></i>Location detected
+                        </span>
+                    @endif
                 </div>
 
                 <!-- Trainers Grid -->
@@ -149,8 +187,22 @@
                                     </div>
                                     @if($trainer->salary)
                                         <div class="trainer-card-price">
-                                            <span class="trainer-card-price-label">Monthly Rate</span>
-                                            <span class="trainer-card-price-amount">RM {{ number_format($trainer->salary, 0) }}</span>
+                                            <div class="trainer-card-price-left">
+                                                <span class="trainer-card-price-label">Monthly Rate</span>
+                                                <span class="trainer-card-price-amount">RM {{ number_format($trainer->salary, 0) }}</span>
+                                            </div>
+                                            @if(isset($trainer->distance) && $trainer->distance !== null)
+                                                <div class="trainer-card-distance">
+                                                    <i class="bi bi-signpost-2 me-1"></i>{{ $trainer->distance }} km away
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @elseif(isset($trainer->distance) && $trainer->distance !== null)
+                                        <div class="trainer-card-price">
+                                            <div class="trainer-card-price-left"></div>
+                                            <div class="trainer-card-distance">
+                                                <i class="bi bi-signpost-2 me-1"></i>{{ $trainer->distance }} km away
+                                            </div>
                                         </div>
                                     @endif
                                     <div class="trainer-card-button">
@@ -177,5 +229,81 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const getLocationBtn = document.getElementById('get-user-location');
+    const locationStatus = document.getElementById('location-status');
+    const userLatInput = document.getElementById('user-latitude');
+    const userLngInput = document.getElementById('user-longitude');
+
+    // Get user's current location
+    getLocationBtn.addEventListener('click', function() {
+        if (!navigator.geolocation) {
+            locationStatus.textContent = 'Geolocation is not supported by your browser';
+            locationStatus.style.color = '#dc3545';
+            return;
+        }
+
+        locationStatus.textContent = 'Detecting location...';
+        locationStatus.style.color = '#17a2b8';
+        getLocationBtn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                userLatInput.value = lat;
+                userLngInput.value = lng;
+                
+                locationStatus.textContent = 'Location detected!';
+                locationStatus.style.color = '#28a745';
+                
+                // Reload page with location parameters, preserving all existing filters
+                const url = new URL(window.location.href);
+                url.searchParams.set('user_lat', lat);
+                url.searchParams.set('user_lng', lng);
+                // Preserve all existing filter parameters (category, state, area, availability_day, min_rating, radius)
+                window.location.href = url.toString();
+            },
+            function(error) {
+                let errorMsg = 'Unable to detect location. ';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMsg += 'Please allow location access.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMsg += 'Location information unavailable.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMsg += 'Location request timed out.';
+                        break;
+                    default:
+                        errorMsg += 'An unknown error occurred.';
+                        break;
+                }
+                locationStatus.textContent = errorMsg;
+                locationStatus.style.color = '#dc3545';
+                getLocationBtn.disabled = false;
+            }
+        );
+    });
+
+    // Update radius function - preserves all existing filters
+    window.updateRadius = function() {
+        const radiusSelect = document.getElementById('radius-filter');
+        const radiusValue = radiusSelect.value;
+        const url = new URL(window.location.href);
+        if (radiusValue) {
+            url.searchParams.set('radius', radiusValue);
+        } else {
+            url.searchParams.delete('radius');
+        }
+        // Preserve all existing filter parameters (category, state, area, availability_day, min_rating, user_lat, user_lng)
+        window.location.href = url.toString();
+    };
+});
+</script>
 @endsection
 

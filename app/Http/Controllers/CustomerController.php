@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Booking;
+use App\Review;
+use App\Reminder;
 use App\Customer;
 
 class CustomerController extends Controller
@@ -99,10 +101,11 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         
-        // Refresh bookings and update progress
+        // Refresh bookings and update progress, load reviews and reminders
         foreach ($bookings as $booking) {
             $booking->refresh();
             $booking->updateProgress();
+            $booking->load(['review', 'reminders']);
         }
         
         return view('customer.bookings', compact('bookings'));
@@ -134,16 +137,29 @@ class CustomerController extends Controller
             ->where('payment_status', 'paid')
             ->firstOrFail();
 
+        // Check if booking progress is upcoming or ongoing
+        $progress = $booking->progress ?? $booking->calculateProgress();
+        if (!in_array($progress, ['upcoming', 'ongoing'])) {
+            return redirect()->route('customer.bookings')
+                ->with('error', 'Reminder can only be set for upcoming or ongoing bookings.');
+        }
+
         $request->validate([
             'reminder_date' => 'required|date|after:now',
             'reminder_note' => 'nullable|string|max:500',
         ]);
 
-        // TODO: Implement reminder functionality (store in database, send notifications, etc.)
-        // For now, just return success message
+        // Create reminder
+        Reminder::create([
+            'booking_id' => $booking->id,
+            'user_id' => $user->id,
+            'reminder_date' => $request->reminder_date,
+            'note' => $request->reminder_note,
+            'sent' => false,
+        ]);
         
         return redirect()->route('customer.bookings')
-            ->with('success', 'Reminder set successfully!');
+            ->with('success', 'Reminder set successfully! You will be notified on ' . \Carbon\Carbon::parse($request->reminder_date)->format('M d, Y \a\t g:i A') . '.');
     }
 
     /**
@@ -155,15 +171,39 @@ class CustomerController extends Controller
         $booking = Booking::where('id', $id)
             ->where('user_id', $user->id)
             ->where('payment_status', 'paid')
+            ->with('trainer')
             ->firstOrFail();
+
+        // Check if booking progress is completed
+        $progress = $booking->progress ?? $booking->calculateProgress();
+        if ($progress !== 'completed') {
+            return redirect()->route('customer.bookings')
+                ->with('error', 'You can only leave feedback when all sessions are completed.');
+        }
+
+        // Check if review already exists for this booking
+        $existingReview = Review::where('booking_id', $booking->id)->first();
+        if ($existingReview) {
+            return redirect()->route('customer.bookings')
+                ->with('error', 'You have already submitted feedback for this booking.');
+        }
 
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'feedback' => 'required|string|min:10|max:1000',
         ]);
 
-        // TODO: Implement feedback storage (create reviews table, store rating and feedback)
-        // For now, just return success message
+        // Create review
+        $review = Review::create([
+            'booking_id' => $booking->id,
+            'trainer_id' => $booking->trainer_id,
+            'user_id' => $user->id,
+            'rating' => $request->rating,
+            'feedback' => $request->feedback,
+        ]);
+
+        // Update trainer's average rating
+        $booking->trainer->updateRating();
         
         return redirect()->route('customer.bookings')
             ->with('success', 'Thank you for your feedback!');
