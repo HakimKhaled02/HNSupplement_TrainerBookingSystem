@@ -159,6 +159,15 @@ p, span, a, li, label, input, button {
 }
 
 .navbar-brand:hover {
+    color: #ffffff !important;
+}
+
+.brand-text {
+    color: var(--accent-green) !important;
+    transition: none;
+}
+
+.brand-text:hover {
     color: var(--accent-green) !important;
 }
 
@@ -791,6 +800,71 @@ p, span, a, li, label, input, button {
     color: #666666;
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+/* Recent Bookings Styles */
+.recent-bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.recent-booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.recent-booking-item:hover {
+    background: #f0f0f0;
+    border-color: #4a9eff;
+}
+
+.recent-booking-info {
+    flex: 1;
+}
+
+.recent-booking-customer {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #000000;
+    margin-bottom: 0.25rem;
+}
+
+.recent-booking-details {
+    display: flex;
+    gap: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    color: #666666;
+}
+
+.recent-booking-date {
+    color: #666666;
+}
+
+.recent-booking-amount {
+    color: #4a9eff;
+    font-weight: 600;
+}
+
+.recent-booking-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.recent-booking-status.paid {
+    background: rgba(74, 158, 255, 0.1);
+    color: #4a9eff;
 }
 
 /* Dashboard Tables */
@@ -4374,6 +4448,579 @@ p, span, a, li, label, input, button {
     transform: translateY(-1px);
 }
 
+/* Attendance Management Styles */
+.attendance-container {
+    min-height: calc(100vh - 200px);
+}
+
+.attendance-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.attendance-day-section {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-day-title {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+}
+
+.attendance-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.attendance-slot-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-slot-time {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: #000000;
+}
+
+.attendance-slot-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.attendance-radio-label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.attendance-radio-label input[type="radio"] {
+    display: none;
+}
+
+.attendance-status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.attendance-radio-label input[type="radio"]:checked + .attendance-status-badge.present {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.attendance-radio-label input[type="radio"]:checked + .attendance-status-badge.absent {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+.attendance-status-badge.present {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 2px solid transparent;
+}
+
+.attendance-status-badge.absent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 2px solid transparent;
+}
+
+.attendance-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Customer Attendance View Styles */
+.customer-attendance-container {
+    min-height: calc(100vh - 200px);
+    background-color: #f5f5f5;
+}
+
+.attendance-record-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.attendance-record-item {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-record-header {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #000000;
+    margin-bottom: 0.75rem;
+}
+
+.attendance-record-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.attendance-record-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.attendance-slot-time {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    color: #666666;
+}
+
+.attendance-status-badge-view {
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.attendance-status-badge-view.present {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.attendance-status-badge-view.absent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* Bookings Table Styles */
+.bookings-table {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bookings-table thead th {
+    background: #f9f9f9;
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: left;
+}
+
+.bookings-table tbody td {
+    padding: 0.7rem 0.75rem;
+    vertical-align: middle;
+    color: #000000 !important;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.bookings-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+}
+
+.bookings-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Override dashboard card body table styles for bookings table */
+.dashboard-card-body .bookings-table {
+    color: #000000 !important;
+}
+
+.dashboard-card-body .bookings-table thead th {
+    color: #000000 !important;
+    background: #f9f9f9 !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+}
+
+.dashboard-card-body .bookings-table tbody td {
+    color: #000000 !important;
+}
+
+.dashboard-card-body .bookings-table tbody tr {
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.dashboard-card-body .bookings-table tbody tr:hover {
+    background-color: #f9f9f9 !important;
+}
+
+/* Ensure all text in bookings table is visible */
+.dashboard-card-body .bookings-table small,
+.bookings-table small {
+    color: #666666 !important;
+    display: block;
+    line-height: 1.4;
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+}
+
+/* Booking Actions Group */
+.booking-actions-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.booking-actions-group .btn {
+    width: 100%;
+    text-align: left;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.booking-actions-group .btn i {
+    font-size: 0.8rem;
+    margin-right: 0.25rem;
+}
+
+.booking-actions-group .btn.disabled,
+.booking-actions-group .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Rating Input Styles */
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.25rem;
+}
+
+.rating-input input[type="radio"] {
+    display: none;
+}
+
+.rating-input label {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+    color: #ffc107;
+}
+
+.rating-input input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+.rating-input input[type="radio"]:checked + label ~ label {
+    color: #ffc107;
+}
+
+.dashboard-card-body .bookings-table strong,
+.bookings-table strong {
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+.dashboard-card-body .bookings-table .text-muted,
+.bookings-table .text-muted {
+    color: #666666 !important;
+}
+
+/* Improve table cell alignment and spacing */
+.bookings-table tbody td {
+    vertical-align: middle;
+}
+
+.bookings-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--accent-green) !important;
+}
+
+.booking-customer-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.booking-customer-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.booking-customer-info strong {
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.3;
+}
+
+.booking-customer-info .text-muted {
+    color: #666666 !important;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.booking-customer-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+}
+
+.booking-customer-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    border: 2px solid #e0e0e0;
+}
+
+.day-badge-small {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    background: rgba(0, 204, 102, 0.1);
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    border-radius: 10px;
+    color: var(--accent-green);
+    font-size: 0.7rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    margin-right: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+}
+
+.status-badge.status-paid {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-badge.status-pending {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.status-badge.status-cancelled,
+.status-badge.status-refunded {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* Progress Badge Styles */
+.progress-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+}
+
+.progress-badge.progress-completed {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.progress-badge.progress-ongoing {
+    background: rgba(0, 123, 255, 0.15);
+    color: #007bff;
+    border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.progress-badge.progress-upcoming {
+    background: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* Modal Attendance Styles */
+.attendance-schedule-modal {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.attendance-day-section-modal {
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-day-title-modal {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin: 0 0 0.35rem 0;
+}
+
+.attendance-slots-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.attendance-slot-item-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.5rem;
+    background: #ffffff;
+    border-radius: 4px;
+}
+
+.attendance-slot-time-modal {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    color: #000000;
+}
+
+.attendance-slot-actions-modal {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.attendance-radio-label-modal {
+    margin: 0;
+    cursor: pointer;
+}
+
+.attendance-radio-label-modal input[type="radio"] {
+    display: none;
+}
+
+.attendance-status-badge-modal {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.attendance-radio-label-modal input[type="radio"]:checked + .attendance-status-badge-modal.present {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.attendance-radio-label-modal input[type="radio"]:checked + .attendance-status-badge-modal.absent {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+.attendance-status-badge-modal.present {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 2px solid transparent;
+}
+
+.attendance-status-badge-modal.absent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 2px solid transparent;
+}
+
+.attendance-record-list-modal {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.attendance-record-item-modal {
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-record-slots-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+}
+
+.attendance-record-slot-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.5rem;
+    background: #ffffff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.attendance-status-badge-view-modal {
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.attendance-status-badge-view-modal.present {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.attendance-status-badge-view-modal.absent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
 .booking-date-new {
     color: #999999;
     font-family: 'Poppins', sans-serif;
@@ -4560,5 +5207,252 @@ p, span, a, li, label, input, button {
 
     .customer-form-actions .btn {
         width: 100%;
+    }
+}
+
+/* Trainer Bookings Page Styles */
+.trainer-bookings-page-container {
+    min-height: calc(100vh - 200px);
+    background-color: #f5f5f5;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.trainer-bookings-header {
+    margin-bottom: 1.5rem;
+}
+
+.trainer-bookings-page-title {
+    color: var(--accent-green);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.trainer-bookings-page-title i {
+    color: var(--accent-green);
+}
+
+/* Trainer Bookings List Card Layout */
+.trainer-bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.trainer-booking-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 204, 102, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.trainer-booking-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 204, 102, 0.15);
+    transform: translateY(-2px);
+    border-color: rgba(0, 204, 102, 0.3);
+}
+
+.trainer-booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.trainer-booking-customer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.trainer-booking-avatar,
+.trainer-booking-avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.trainer-booking-avatar {
+    object-fit: cover;
+    border: 2px solid rgba(0, 204, 102, 0.2);
+}
+
+.trainer-booking-avatar-placeholder {
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.trainer-booking-customer-info {
+    flex: 1;
+}
+
+.trainer-booking-customer-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 0.25rem 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.trainer-booking-customer-email {
+    font-size: 0.9rem;
+    color: #666666;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.trainer-booking-id-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.trainer-booking-id {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    font-family: 'Poppins', sans-serif;
+}
+
+.trainer-booking-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.trainer-booking-detail-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.trainer-booking-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.trainer-booking-detail-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.trainer-booking-detail-label i {
+    color: var(--accent-green);
+    font-size: 1rem;
+}
+
+.trainer-booking-detail-value {
+    font-size: 1rem;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.trainer-booking-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+.trainer-booking-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.trainer-booking-attendance-btn {
+    background: var(--accent-green);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.trainer-booking-attendance-btn:hover {
+    background: var(--accent-green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 204, 102, 0.3);
+    color: #ffffff;
+}
+
+.trainer-attendance-btn {
+    background: #4a9eff;
+    color: #ffffff;
+    border: none;
+    padding: 0.4rem 0.875rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.trainer-attendance-btn:hover {
+    background: #3a8eef;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(74, 158, 255, 0.3);
+}
+
+/* Responsive Design for Trainer Bookings */
+@media (max-width: 768px) {
+    .trainer-booking-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .trainer-booking-id-status {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .trainer-booking-detail-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .trainer-booking-actions {
+        justify-content: stretch;
+    }
+
+    .trainer-booking-attendance-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

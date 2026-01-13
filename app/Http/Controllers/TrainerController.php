@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Booking;
 
 class TrainerController extends Controller
 {
@@ -33,7 +34,20 @@ class TrainerController extends Controller
             return view('trainer.pending');
         }
 
-        return view('trainer.dashboard', compact('trainer'));
+        // Get recent paid bookings (last 5)
+        $recentBookings = Booking::where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->with(['user', 'user.customer'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        // Get total bookings count
+        $totalBookings = Booking::where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->count();
+
+        return view('trainer.dashboard', compact('trainer', 'recentBookings', 'totalBookings'));
     }
 
     /**
@@ -248,5 +262,118 @@ class TrainerController extends Controller
 
         // Trainer can set availability only if there are NO incomplete bookings
         return !$incompleteBookings;
+    }
+
+    /**
+     * Show trainer bookings.
+     */
+    public function bookings()
+    {
+        // Check if user is trainer
+        if (Auth::user()->role !== 'trainer') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $trainer = Auth::user()->trainer;
+
+        if (!$trainer) {
+            return redirect()->route('trainer.dashboard')->with('error', 'Trainer profile not found.');
+        }
+
+        // Get only paid bookings for this trainer
+        $bookings = Booking::where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->with(['user', 'user.customer'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        // Update progress for all bookings
+        foreach ($bookings as $booking) {
+            $booking->updateProgress();
+        }
+        
+        return view('trainer.bookings', compact('bookings', 'trainer'));
+    }
+
+    /**
+     * Show attendance management page for a booking.
+     */
+    public function manageAttendance($id)
+    {
+        // Check if user is trainer
+        if (Auth::user()->role !== 'trainer') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $trainer = Auth::user()->trainer;
+        $booking = Booking::where('id', $id)
+            ->where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->with(['user', 'user.customer'])
+            ->firstOrFail();
+
+        // Redirect to bookings page - attendance is now managed via modal
+        return redirect()->route('trainer.bookings')->with('open_attendance_modal', $booking->id);
+    }
+
+    /**
+     * Update attendance for a booking.
+     */
+    public function updateAttendance(Request $request, $id)
+    {
+        // Check if user is trainer
+        if (Auth::user()->role !== 'trainer') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $trainer = Auth::user()->trainer;
+        $booking = Booking::where('id', $id)
+            ->where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->firstOrFail();
+
+        $request->validate([
+            'attendance' => 'required|array',
+        ]);
+
+        // Process attendance data
+        $attendance = [];
+        foreach ($request->attendance as $key => $status) {
+            // Key format: "day_start_time_date" e.g., "monday_08:00_2026-01-15"
+            // Date has dashes, so when we split by '_', the date remains as one part
+            $parts = explode('_', $key);
+            if (count($parts) >= 3) {
+                $day = $parts[0];
+                $startTime = $parts[1];
+                // The date is in parts[2] (format: Y-m-d) since it has dashes, not underscores
+                $date = $parts[2];
+                
+                // If date was somehow split (shouldn't happen), join remaining parts
+                if (count($parts) > 3) {
+                    $date = implode('-', array_slice($parts, 2));
+                }
+                
+                $attendance[] = [
+                    'day' => $day,
+                    'start_time' => $startTime,
+                    'date' => $date,
+                    'status' => $status, // 'present' or 'absent'
+                    'marked_at' => now()->toDateTimeString(),
+                ];
+            }
+        }
+
+        // Update attendance and save
+        $booking->attendance = $attendance;
+        $booking->save();
+        
+        // Calculate and update progress
+        $booking->updateProgress();
+        
+        // Refresh the booking to ensure data is up to date
+        $booking->refresh();
+
+        return redirect()->route('trainer.bookings')
+            ->with('success', 'Attendance updated successfully!');
     }
 }

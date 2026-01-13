@@ -6,7 +6,7 @@
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="#" class="sidebar-menu-link">
+        <a href="{{ route('trainer.bookings') }}" class="sidebar-menu-link {{ request()->routeIs('trainer.bookings') ? 'active' : '' }}">
             <i class="bi bi-calendar-check me-2"></i>
             <span>Bookings</span>
         </a>
@@ -21,12 +21,6 @@
         <a href="#" class="sidebar-menu-link">
             <i class="bi bi-star me-2"></i>
             <span>Reviews</span>
-        </a>
-    </li>
-    <li class="sidebar-menu-item">
-        <a href="#" class="sidebar-menu-link">
-            <i class="bi bi-wallet2 me-2"></i>
-            <span>Earnings</span>
         </a>
     </li>
     <li class="sidebar-menu-item">

@@ -14,7 +14,7 @@
                 <i class="bi bi-calendar-check"></i>
             </div>
             <h3 class="dashboard-stat-title">Bookings</h3>
-            <p class="dashboard-stat-value">0</p>
+            <p class="dashboard-stat-value"><?php echo e($totalBookings ?? 0); ?></p>
         </div>
     </div>
 
@@ -43,11 +43,44 @@
     <div class="card-body dashboard-card-body">
         <h2 class="dashboard-card-title mb-3">Your Profile</h2>
         <p class="dashboard-text mb-3">Complete your trainer profile to start receiving bookings.</p>
-        <a href="#" class="btn dashboard-btn-primary">
+        <a href="<?php echo e(route('trainer.profile.edit')); ?>" class="btn dashboard-btn-primary">
             Edit Profile
         </a>
     </div>
 </div>
+
+<?php if(isset($recentBookings) && $recentBookings->count() > 0): ?>
+<div class="card dashboard-card">
+    <div class="card-body dashboard-card-body">
+        <h2 class="dashboard-card-title mb-3">Recent Bookings</h2>
+        <div class="recent-bookings-list">
+            <?php $__currentLoopData = $recentBookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="recent-booking-item">
+                <div class="recent-booking-info">
+                    <div class="recent-booking-customer">
+                        <strong><?php echo e($booking->user->name); ?></strong>
+                    </div>
+                    <div class="recent-booking-details">
+                        <span class="recent-booking-date">
+                            <?php echo e(\Carbon\Carbon::parse($booking->start_date)->format('M d')); ?> - 
+                            <?php echo e(\Carbon\Carbon::parse($booking->end_date)->format('M d, Y')); ?>
+
+                        </span>
+                        <span class="recent-booking-amount">RM <?php echo e(number_format($booking->total_amount, 2)); ?></span>
+                    </div>
+                </div>
+                <span class="recent-booking-status paid">Paid</span>
+            </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+        <div class="mt-3">
+            <a href="<?php echo e(route('trainer.bookings')); ?>" class="btn dashboard-btn-primary">
+                View All Bookings
+            </a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 

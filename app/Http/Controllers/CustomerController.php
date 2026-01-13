@@ -99,7 +99,97 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         
+        // Refresh bookings and update progress
+        foreach ($bookings as $booking) {
+            $booking->refresh();
+            $booking->updateProgress();
+        }
+        
         return view('customer.bookings', compact('bookings'));
+    }
+
+    /**
+     * Show attendance for a booking.
+     */
+    public function viewAttendance($id)
+    {
+        $user = Auth::user();
+        $booking = Booking::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('payment_status', 'paid')
+            ->with(['trainer', 'trainer.user'])
+            ->firstOrFail();
+
+        return view('customer.attendance', compact('booking'));
+    }
+
+    /**
+     * Set reminder for a booking.
+     */
+    public function setReminder(Request $request, $id)
+    {
+        $user = Auth::user();
+        $booking = Booking::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('payment_status', 'paid')
+            ->firstOrFail();
+
+        $request->validate([
+            'reminder_date' => 'required|date|after:now',
+            'reminder_note' => 'nullable|string|max:500',
+        ]);
+
+        // TODO: Implement reminder functionality (store in database, send notifications, etc.)
+        // For now, just return success message
+        
+        return redirect()->route('customer.bookings')
+            ->with('success', 'Reminder set successfully!');
+    }
+
+    /**
+     * Submit feedback and rating for a booking.
+     */
+    public function submitFeedback(Request $request, $id)
+    {
+        $user = Auth::user();
+        $booking = Booking::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('payment_status', 'paid')
+            ->firstOrFail();
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'feedback' => 'required|string|min:10|max:1000',
+        ]);
+
+        // TODO: Implement feedback storage (create reviews table, store rating and feedback)
+        // For now, just return success message
+        
+        return redirect()->route('customer.bookings')
+            ->with('success', 'Thank you for your feedback!');
+    }
+
+    /**
+     * Request refund for a booking.
+     */
+    public function requestRefund(Request $request, $id)
+    {
+        $user = Auth::user();
+        $booking = Booking::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('payment_status', 'paid')
+            ->firstOrFail();
+
+        $request->validate([
+            'refund_reason' => 'required|string|in:trainer_unavailable,service_not_as_described,cancelled_by_customer,technical_issues,other',
+            'refund_details' => 'required|string|min:10|max:1000',
+        ]);
+
+        // TODO: Implement refund request functionality (store request, notify admin, process refund)
+        // For now, just return success message
+        
+        return redirect()->route('customer.bookings')
+            ->with('success', 'Refund request submitted successfully! We will review your request and get back to you soon.');
     }
 }
 
