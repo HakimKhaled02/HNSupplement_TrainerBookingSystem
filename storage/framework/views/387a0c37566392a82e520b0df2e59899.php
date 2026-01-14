@@ -8,6 +8,17 @@
     <?php echo $__env->make('components.admin-sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startPush('styles'); ?>
+<style>
+    .dashboard-title {
+        background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <!-- Trainers List -->
 <div class="card dashboard-card">

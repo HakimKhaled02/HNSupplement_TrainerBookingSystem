@@ -8,6 +8,17 @@
     @include('components.admin-sidebar')
 @endsection
 
+@push('styles')
+<style>
+    .dashboard-title {
+        background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+@endpush
+
 @section('content')
 <!-- Trainers List -->
 <div class="card dashboard-card">

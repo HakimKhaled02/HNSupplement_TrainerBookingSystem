@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/trainer/profile', [TrainerController::class, 'profile'])->name('trainer.profile');
     Route::get('/trainer/profile/edit', [TrainerController::class, 'editProfile'])->name('trainer.profile.edit');
     Route::post('/trainer/profile/update', [TrainerController::class, 'updateProfile'])->name('trainer.profile.update');
+    Route::get('/trainer/reviews', [TrainerController::class, 'reviews'])->name('trainer.reviews');
     Route::get('/trainer/availability', [TrainerController::class, 'availability'])->name('trainer.availability');
     Route::post('/trainer/availability/update', [TrainerController::class, 'updateAvailability'])->name('trainer.availability.update');
     Route::get('/trainer/bookings', [TrainerController::class, 'bookings'])->name('trainer.bookings');

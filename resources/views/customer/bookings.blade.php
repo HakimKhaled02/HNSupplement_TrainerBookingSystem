@@ -105,7 +105,7 @@
                                                             <i class="bi bi-check-circle"></i> Attendance
                                                         </button>
                                                         <button type="button" 
-                                                                class="btn btn-sm btn-info {{ !$isUpcomingOrOngoing ? 'disabled' : '' }}" 
+                                                                class="btn btn-sm booking-reminder-btn {{ !$isUpcomingOrOngoing ? 'disabled' : '' }}" 
                                                                 @if(!$isUpcomingOrOngoing) disabled @else data-bs-toggle="modal" data-bs-target="#reminderModal{{ $booking->id }}" @endif
                                                                 title="{{ $isUpcomingOrOngoing ? 'Set Reminder' : 'Reminder only available for upcoming or ongoing bookings' }}">
                                                             <i class="bi bi-bell"></i> Reminder

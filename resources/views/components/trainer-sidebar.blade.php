@@ -18,7 +18,7 @@
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="{{ route('trainer.profile') }}#reviews" class="sidebar-menu-link {{ request()->routeIs('trainer.profile') ? 'active' : '' }}">
+        <a href="{{ route('trainer.reviews') }}" class="sidebar-menu-link {{ request()->routeIs('trainer.reviews') ? 'active' : '' }}">
             <i class="bi bi-star me-2"></i>
             <span>Reviews</span>
         </a>

@@ -1,13 +1,24 @@
 <?php $__env->startSection('title', 'Trainer Dashboard'); ?>
 
-<?php $__env->startSection('page-title', 'Welcome, ' . auth()->user()->name . '!'); ?>
+<?php $__env->startSection('page-title', 'Welcome to Trainer Dashboard'); ?>
+
+<?php $__env->startPush('styles'); ?>
+<style>
+    .dashboard-title {
+        background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+<?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('sidebar-menu'); ?>
     <?php echo $__env->make('components.trainer-sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="row g-4 mb-4">
+<div class="row g-2 mb-3">
     <div class="col-md-4">
         <div class="card dashboard-stat-card">
             <div class="dashboard-stat-icon">
@@ -34,15 +45,15 @@
                 <i class="bi bi-currency-dollar"></i>
             </div>
             <h3 class="dashboard-stat-title">Earnings</h3>
-            <p class="dashboard-stat-value">$0</p>
+            <p class="dashboard-stat-value">RM <?php echo e(number_format($totalEarnings ?? 0, 2)); ?></p>
         </div>
     </div>
 </div>
 
 <div class="card dashboard-card">
     <div class="card-body dashboard-card-body">
-        <h2 class="dashboard-card-title mb-3">Your Profile</h2>
-        <p class="dashboard-text mb-3">Complete your trainer profile to start receiving bookings.</p>
+        <h2 class="dashboard-card-title mb-2">Your Profile</h2>
+        <p class="dashboard-text mb-2">Complete your trainer profile to start receiving bookings.</p>
         <a href="<?php echo e(route('trainer.profile.edit')); ?>" class="btn dashboard-btn-primary">
             Edit Profile
         </a>
@@ -52,9 +63,18 @@
 <?php if(isset($recentBookings) && $recentBookings->count() > 0): ?>
 <div class="card dashboard-card">
     <div class="card-body dashboard-card-body">
-        <h2 class="dashboard-card-title mb-3">Recent Bookings</h2>
+        <h2 class="dashboard-card-title mb-2">Recent Bookings</h2>
         <div class="recent-bookings-list">
             <?php $__currentLoopData = $recentBookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php
+                $progress = $booking->progress ?? $booking->calculateProgress();
+                $progressLabels = [
+                    'upcoming' => 'Upcoming',
+                    'ongoing' => 'Ongoing',
+                    'completed' => 'Completed'
+                ];
+                $progressClass = 'progress-' . $progress;
+            ?>
             <div class="recent-booking-item">
                 <div class="recent-booking-info">
                     <div class="recent-booking-customer">
@@ -69,11 +89,14 @@
                         <span class="recent-booking-amount">RM <?php echo e(number_format($booking->total_amount, 2)); ?></span>
                     </div>
                 </div>
-                <span class="recent-booking-status paid">Paid</span>
+                <div class="recent-booking-status-group">
+                    <span class="recent-booking-status paid">Paid</span>
+                    <span class="recent-booking-progress <?php echo e($progressClass); ?>"><?php echo e($progressLabels[$progress] ?? $progress); ?></span>
+                </div>
             </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-        <div class="mt-3">
+        <div class="mt-2">
             <a href="<?php echo e(route('trainer.bookings')); ?>" class="btn dashboard-btn-primary">
                 View All Bookings
             </a>

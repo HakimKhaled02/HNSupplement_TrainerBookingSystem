@@ -8,9 +8,20 @@
     @include('components.admin-sidebar')
 @endsection
 
+@push('styles')
+<style>
+    .dashboard-title {
+        background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+@endpush
+
 @section('content')
 <!-- Summary Cards -->
-<div class="row g-4 mb-4">
+<div class="row g-2 mb-3">
     <div class="col-md-6">
         <div class="approval-summary-card pending">
             <div class="approval-summary-icon">
@@ -36,7 +47,7 @@
 </div>
 
 <!-- Pending Trainers -->
-<div class="card mb-4 dashboard-card">
+<div class="card mb-3 dashboard-card">
     <div class="card-header dashboard-card-header">
         <h2 class="dashboard-card-title">
             <i class="bi bi-person-check me-2"></i>
@@ -51,7 +62,12 @@
                     <div class="trainer-card pending-card">
                         <div class="trainer-card-header">
                             <div class="trainer-avatar">
-                                {{ strtoupper(substr($trainer->user->name, 0, 1)) }}
+                                @if($trainer->profile_picture)
+                                    <img src="{{ asset('storage/' . $trainer->profile_picture) }}" 
+                                         alt="{{ $trainer->user->name }}">
+                                @else
+                                    {{ strtoupper(substr($trainer->user->name, 0, 1)) }}
+                                @endif
                             </div>
                             <div class="trainer-info">
                                 <h3 class="trainer-name">{{ $trainer->user->name }}</h3>
@@ -106,7 +122,12 @@
                     <div class="trainer-card active-card">
                         <div class="trainer-card-header">
                             <div class="trainer-avatar active">
-                                {{ strtoupper(substr($trainer->user->name, 0, 1)) }}
+                                @if($trainer->profile_picture)
+                                    <img src="{{ asset('storage/' . $trainer->profile_picture) }}" 
+                                         alt="{{ $trainer->user->name }}">
+                                @else
+                                    {{ strtoupper(substr($trainer->user->name, 0, 1)) }}
+                                @endif
                             </div>
                             <div class="trainer-info">
                                 <h3 class="trainer-name">{{ $trainer->user->name }}</h3>

@@ -18,7 +18,7 @@
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="<?php echo e(route('trainer.profile')); ?>#reviews" class="sidebar-menu-link <?php echo e(request()->routeIs('trainer.profile') ? 'active' : ''); ?>">
+        <a href="<?php echo e(route('trainer.reviews')); ?>" class="sidebar-menu-link <?php echo e(request()->routeIs('trainer.reviews') ? 'active' : ''); ?>">
             <i class="bi bi-star me-2"></i>
             <span>Reviews</span>
         </a>

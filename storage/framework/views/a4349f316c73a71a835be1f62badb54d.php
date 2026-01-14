@@ -8,9 +8,20 @@
     <?php echo $__env->make('components.admin-sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startPush('styles'); ?>
+<style>
+    .dashboard-title {
+        background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <!-- Summary Cards -->
-<div class="row g-4 mb-4">
+<div class="row g-2 mb-3">
     <div class="col-md-6">
         <div class="approval-summary-card pending">
             <div class="approval-summary-icon">
@@ -36,7 +47,7 @@
 </div>
 
 <!-- Pending Trainers -->
-<div class="card mb-4 dashboard-card">
+<div class="card mb-3 dashboard-card">
     <div class="card-header dashboard-card-header">
         <h2 class="dashboard-card-title">
             <i class="bi bi-person-check me-2"></i>
@@ -51,8 +62,13 @@
                     <div class="trainer-card pending-card">
                         <div class="trainer-card-header">
                             <div class="trainer-avatar">
-                                <?php echo e(strtoupper(substr($trainer->user->name, 0, 1))); ?>
+                                <?php if($trainer->profile_picture): ?>
+                                    <img src="<?php echo e(asset('storage/' . $trainer->profile_picture)); ?>" 
+                                         alt="<?php echo e($trainer->user->name); ?>">
+                                <?php else: ?>
+                                    <?php echo e(strtoupper(substr($trainer->user->name, 0, 1))); ?>
 
+                                <?php endif; ?>
                             </div>
                             <div class="trainer-info">
                                 <h3 class="trainer-name"><?php echo e($trainer->user->name); ?></h3>
@@ -108,8 +124,13 @@
                     <div class="trainer-card active-card">
                         <div class="trainer-card-header">
                             <div class="trainer-avatar active">
-                                <?php echo e(strtoupper(substr($trainer->user->name, 0, 1))); ?>
+                                <?php if($trainer->profile_picture): ?>
+                                    <img src="<?php echo e(asset('storage/' . $trainer->profile_picture)); ?>" 
+                                         alt="<?php echo e($trainer->user->name); ?>">
+                                <?php else: ?>
+                                    <?php echo e(strtoupper(substr($trainer->user->name, 0, 1))); ?>
 
+                                <?php endif; ?>
                             </div>
                             <div class="trainer-info">
                                 <h3 class="trainer-name"><?php echo e($trainer->user->name); ?></h3>

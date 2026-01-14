@@ -43,18 +43,49 @@ class TrainerController extends Controller
             ->limit(5)
             ->get();
 
+        // Update progress for recent bookings
+        foreach ($recentBookings as $booking) {
+            $booking->updateProgress();
+        }
+
         // Get total bookings count
         $totalBookings = Booking::where('trainer_id', $trainer->id)
             ->where('payment_status', 'paid')
             ->count();
 
-        return view('trainer.dashboard', compact('trainer', 'recentBookings', 'totalBookings'));
+        // Calculate total earnings from completed bookings only
+        $totalEarnings = Booking::where('trainer_id', $trainer->id)
+            ->where('payment_status', 'paid')
+            ->where('progress', 'completed')
+            ->sum('total_amount');
+
+        return view('trainer.dashboard', compact('trainer', 'recentBookings', 'totalBookings', 'totalEarnings'));
     }
 
     /**
      * Show trainer profile.
      */
     public function profile()
+    {
+        // Check if user is trainer
+        if (Auth::user()->role !== 'trainer') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $trainer = Auth::user()->trainer;
+
+        // Check if trainer is approved
+        if ($trainer && $trainer->status === 'pending') {
+            return view('trainer.pending');
+        }
+
+        return view('trainer.profile', compact('trainer'));
+    }
+
+    /**
+     * Show trainer reviews.
+     */
+    public function reviews()
     {
         // Check if user is trainer
         if (Auth::user()->role !== 'trainer') {
@@ -77,7 +108,7 @@ class TrainerController extends Controller
                 ->get();
         }
 
-        return view('trainer.profile', compact('trainer', 'reviews'));
+        return view('trainer.reviews', compact('trainer', 'reviews'));
     }
 
     /**

@@ -107,7 +107,7 @@
                                                             <i class="bi bi-check-circle"></i> Attendance
                                                         </button>
                                                         <button type="button" 
-                                                                class="btn btn-sm btn-info <?php echo e(!$isUpcomingOrOngoing ? 'disabled' : ''); ?>" 
+                                                                class="btn btn-sm booking-reminder-btn <?php echo e(!$isUpcomingOrOngoing ? 'disabled' : ''); ?>" 
                                                                 <?php if(!$isUpcomingOrOngoing): ?> disabled <?php else: ?> data-bs-toggle="modal" data-bs-target="#reminderModal<?php echo e($booking->id); ?>" <?php endif; ?>
                                                                 title="<?php echo e($isUpcomingOrOngoing ? 'Set Reminder' : 'Reminder only available for upcoming or ongoing bookings'); ?>">
                                                             <i class="bi bi-bell"></i> Reminder
