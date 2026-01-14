@@ -15,6 +15,7 @@ class Staff extends Model
         'department',
         'position',
         'permissions',
+        'profile_picture',
     ];
 
     protected $casts = [

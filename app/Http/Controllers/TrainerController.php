@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Booking;
 use App\Review;
@@ -147,7 +148,7 @@ class TrainerController extends Controller
             return redirect()->route('trainer.dashboard')->with('error', 'Trainer profile not found.');
         }
 
-        $request->validate([
+        $validationRules = [
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'state' => 'nullable|string|max:255',
@@ -156,11 +157,33 @@ class TrainerController extends Controller
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        ];
+
+        // Add password validation only if password is being changed
+        if ($request->filled('password')) {
+            $validationRules['current_password'] = 'required';
+            $validationRules['password'] = 'required|min:8|confirmed';
+        }
+
+        $request->validate($validationRules);
 
         // Update user name
         $user = Auth::user();
         $user->name = $request->name;
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            // Verify current password
+            if (!$request->filled('current_password') || !Hash::check($request->current_password, $user->password)) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['current_password' => 'Current password is incorrect.']);
+            }
+
+            // Update password
+            $user->password = Hash::make($request->password);
+        }
+
         $user->save();
 
         // Update trainer profile (excluding salary, qualification_file, and status)

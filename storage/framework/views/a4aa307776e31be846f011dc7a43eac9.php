@@ -13,7 +13,7 @@
                         <h3 class="trainers-filters-title">
                             <i class="bi bi-funnel me-2"></i>Filters
                         </h3>
-                        <?php if(request()->anyFilled(['category', 'state', 'area', 'availability_day', 'min_rating', 'user_lat', 'user_lng', 'radius'])): ?>
+                        <?php if(request()->anyFilled(['category', 'state', 'price_range', 'availability_day', 'min_rating', 'user_lat', 'user_lng', 'radius'])): ?>
                             <a href="<?php echo e(route('trainers')); ?>" class="trainers-clear-filters">
                                 <i class="bi bi-x-circle me-1"></i>Clear All
                             </a>
@@ -54,12 +54,14 @@
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">Area</label>
-                            <input type="text" 
-                                   name="area" 
-                                   class="filter-input" 
-                                   placeholder="Enter area"
-                                   value="<?php echo e(request('area')); ?>">
+                            <label class="filter-label">Price Range</label>
+                            <select name="price_range" class="filter-select">
+                                <option value="">All Prices</option>
+                                <option value="below_100" <?php echo e(request('price_range') == 'below_100' ? 'selected' : ''); ?>>Below RM100</option>
+                                <option value="100_300" <?php echo e(request('price_range') == '100_300' ? 'selected' : ''); ?>>RM100 - RM300</option>
+                                <option value="300_500" <?php echo e(request('price_range') == '300_500' ? 'selected' : ''); ?>>RM300 - RM500</option>
+                                <option value="above_500" <?php echo e(request('price_range') == 'above_500' ? 'selected' : ''); ?>>Above RM500</option>
+                            </select>
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">Availability Day</label>
@@ -268,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const url = new URL(window.location.href);
                 url.searchParams.set('user_lat', lat);
                 url.searchParams.set('user_lng', lng);
-                // Preserve all existing filter parameters (category, state, area, availability_day, min_rating, radius)
+                // Preserve all existing filter parameters (category, state, price_range, availability_day, min_rating, radius)
                 window.location.href = url.toString();
             },
             function(error) {
@@ -304,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             url.searchParams.delete('radius');
         }
-        // Preserve all existing filter parameters (category, state, area, availability_day, min_rating, user_lat, user_lng)
+        // Preserve all existing filter parameters (category, state, price_range, availability_day, min_rating, user_lat, user_lng)
         window.location.href = url.toString();
     };
 });

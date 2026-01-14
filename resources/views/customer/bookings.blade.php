@@ -119,12 +119,6 @@
                                                                 <i class="bi bi-check-circle ms-1"></i>
                                                             @endif
                                                         </button>
-                                                        <button type="button" 
-                                                                class="btn btn-sm btn-danger {{ !$isUpcomingOrOngoing ? 'disabled' : '' }}" 
-                                                                @if(!$isUpcomingOrOngoing) disabled @else data-bs-toggle="modal" data-bs-target="#refundModal{{ $booking->id }}" @endif
-                                                                title="{{ $isUpcomingOrOngoing ? 'Request Refund' : 'Refund only available for upcoming or ongoing bookings' }}">
-                                                            <i class="bi bi-arrow-counterclockwise"></i> Refund
-                                                        </button>
                                                     @endif
                                                 </div>
                                             </td>
@@ -346,56 +340,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Refund Request Modal -->
-                                        <div class="modal fade" id="refundModal{{ $booking->id }}" tabindex="-1" aria-labelledby="refundModalLabel{{ $booking->id }}" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header" style="padding: 0.75rem 1rem;">
-                                                        <h5 class="modal-title" id="refundModalLabel{{ $booking->id }}" style="font-size: 1rem; margin: 0;">
-                                                            Request Refund - Booking #{{ $booking->id }}
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('customer.booking.refund', $booking->id) }}" method="POST">
-                                                        @csrf
-                                                        <div class="modal-body" style="padding: 1rem;">
-                                                            <div class="mb-2" style="font-size: 0.875rem;">
-                                                                <p class="mb-1"><strong>Trainer:</strong> {{ $booking->trainer->user->name }}</p>
-                                                                <p class="mb-1"><strong>Amount:</strong> RM {{ number_format($booking->total_amount, 2) }}</p>
-                                                                <p class="mb-2"><strong>Period:</strong> {{ \Carbon\Carbon::parse($booking->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($booking->end_date)->format('M d, Y') }}</p>
-                                                            </div>
-                                                            <div class="alert alert-warning" style="padding: 0.5rem; font-size: 0.85rem; margin-bottom: 1rem;">
-                                                                <i class="bi bi-exclamation-triangle me-1"></i>Refund requests are subject to review and approval.
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="refund_reason{{ $booking->id }}" class="form-label">Reason for Refund <span class="text-danger">*</span></label>
-                                                                <select class="form-select" id="refund_reason{{ $booking->id }}" name="refund_reason" required>
-                                                                    <option value="">Select a reason...</option>
-                                                                    <option value="trainer_unavailable">Trainer Unavailable</option>
-                                                                    <option value="service_not_as_described">Service Not as Described</option>
-                                                                    <option value="cancelled_by_customer">Cancelled by Customer</option>
-                                                                    <option value="technical_issues">Technical Issues</option>
-                                                                    <option value="other">Other</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="refund_details{{ $booking->id }}" class="form-label">Additional Details</label>
-                                                                <textarea class="form-control" 
-                                                                          id="refund_details{{ $booking->id }}" 
-                                                                          name="refund_details" 
-                                                                          rows="3" 
-                                                                          placeholder="Please provide more details about your refund request..."
-                                                                          required></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer" style="padding: 0.75rem 1rem;">
-                                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-danger btn-sm">Request Refund</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                         @endforeach
                                     </tbody>
                                 </table>

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Trainer;
 use App\User;
 use App\Staff;
+use App\Booking;
 use App\Mail\TrainerApprovedMail;
 use App\Mail\TrainerRejectedMail;
 use Illuminate\Support\Facades\Mail;
@@ -208,5 +210,128 @@ class AdminController extends Controller
         $trainer->save();
 
         return redirect()->route('admin.trainers')->with('success', 'Trainer salary updated successfully.');
+    }
+
+    /**
+     * Show admin profile.
+     */
+    public function profile()
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            return redirect()->route('admin.login')->with('error', 'Please login as admin to access the profile page.');
+        }
+
+        $user = Auth::user();
+        $staff = $user->staff;
+
+        return view('admin.profile', compact('user', 'staff'));
+    }
+
+    /**
+     * Show edit profile form.
+     */
+    public function editProfile()
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            return redirect()->route('admin.login')->with('error', 'Please login as admin to access the profile page.');
+        }
+
+        $user = Auth::user();
+        $staff = $user->staff;
+
+        return view('admin.edit-profile', compact('user', 'staff'));
+    }
+
+    /**
+     * Update admin profile.
+     */
+    public function updateProfile(Request $request)
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            abort(403, 'Unauthorized access');
+        }
+
+        $user = Auth::user();
+        $staff = $user->staff;
+
+        if (!$staff) {
+            return redirect()->route('admin.dashboard')->with('error', 'Staff profile not found.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'department' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update user information
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+
+        // Update staff profile
+        $staff->phone = $request->phone;
+        $staff->department = $request->department;
+        $staff->position = $request->position;
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete old profile picture if exists
+            if ($staff->profile_picture) {
+                Storage::disk('public')->delete($staff->profile_picture);
+            }
+            $staff->profile_picture = $request->file('profile_picture')->store('staff/profile_pictures', 'public');
+        }
+
+        $staff->save();
+
+        // Refresh the relationship to ensure updated data is available
+        $user->refresh();
+        $staff->refresh();
+
+        return redirect()->route('admin.profile')->with('success', 'Profile updated successfully!');
+    }
+
+    /**
+     * Monitor all bookings.
+     */
+    public function monitorBookings()
+    {
+        // Check if user is staff
+        if (!Auth::check() || Auth::user()->role !== 'staff') {
+            return redirect()->route('admin.login')->with('error', 'Please login as admin to access the bookings page.');
+        }
+
+        // Get all bookings with relationships
+        $bookings = Booking::with(['trainer.user', 'user.customer'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        // Update progress for all bookings
+        foreach ($bookings as $booking) {
+            $booking->updateProgress();
+        }
+
+        // Get statistics
+        $totalBookings = Booking::count();
+        $paidBookings = Booking::where('payment_status', 'paid')->count();
+        $completedBookings = Booking::where('progress', 'completed')->count();
+        $ongoingBookings = Booking::where('progress', 'ongoing')->count();
+        $upcomingBookings = Booking::where('progress', 'upcoming')->count();
+
+        return view('admin.monitor-bookings', compact(
+            'bookings',
+            'totalBookings',
+            'paidBookings',
+            'completedBookings',
+            'ongoingBookings',
+            'upcomingBookings'
+        ));
     }
 }

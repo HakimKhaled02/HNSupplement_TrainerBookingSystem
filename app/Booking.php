@@ -22,6 +22,11 @@ class Booking extends Model
         'payment_expires_at',
         'status',
         'progress',
+        'refund_request_status',
+        'refund_reason',
+        'refund_details',
+        'refund_requested_at',
+        'refund_processed_at',
     ];
 
     protected $casts = [
@@ -32,6 +37,8 @@ class Booking extends Model
         'attendance' => 'array',
         'total_amount' => 'decimal:2',
         'payment_expires_at' => 'datetime',
+        'refund_requested_at' => 'datetime',
+        'refund_processed_at' => 'datetime',
     ];
 
     /**

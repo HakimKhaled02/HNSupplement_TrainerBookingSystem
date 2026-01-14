@@ -38,6 +38,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/trainer/{id}/approve', [AdminController::class, 'approveTrainer'])->name('admin.approve.trainer');
     Route::post('/admin/trainer/{id}/reject', [AdminController::class, 'rejectTrainer'])->name('admin.reject.trainer');
     Route::post('/admin/trainer/{id}/update-salary', [AdminController::class, 'updateSalary'])->name('admin.trainer.update-salary');
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::get('/admin/profile/edit', [AdminController::class, 'editProfile'])->name('admin.profile.edit');
+    Route::post('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/monitor/bookings', [AdminController::class, 'monitorBookings'])->name('admin.monitor.bookings');
 });
 
 // Trainer Routes
@@ -63,7 +67,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/booking/{id}/attendance', [CustomerController::class, 'viewAttendance'])->name('customer.attendance');
     Route::post('/customer/booking/{id}/reminder', [CustomerController::class, 'setReminder'])->name('customer.booking.reminder');
     Route::post('/customer/booking/{id}/feedback', [CustomerController::class, 'submitFeedback'])->name('customer.booking.feedback');
-    Route::post('/customer/booking/{id}/refund', [CustomerController::class, 'requestRefund'])->name('customer.booking.refund');
 });
 
 // Logout Route

@@ -46,6 +46,8 @@
                                     $profilePicture = $user->trainer->profile_picture;
                                 } elseif ($user->role === 'customer' && $user->customer && $user->customer->profile_picture) {
                                     $profilePicture = $user->customer->profile_picture;
+                                } elseif ($user->role === 'staff' && $user->staff && $user->staff->profile_picture) {
+                                    $profilePicture = $user->staff->profile_picture;
                                 }
                             @endphp
                             @if($profilePicture)

@@ -18,15 +18,15 @@
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="#" class="sidebar-menu-link">
-            <i class="bi bi-calendar-event me-2"></i>
-            <span>Bookings</span>
+        <a href="{{ route('admin.monitor.bookings') }}" class="sidebar-menu-link {{ request()->routeIs('admin.monitor.bookings') ? 'active' : '' }}">
+            <i class="bi bi-calendar-check me-2"></i>
+            <span>Monitor Bookings</span>
         </a>
     </li>
     <li class="sidebar-menu-item">
-        <a href="#" class="sidebar-menu-link">
-            <i class="bi bi-gear me-2"></i>
-            <span>Settings</span>
+        <a href="{{ route('admin.profile') }}" class="sidebar-menu-link {{ request()->routeIs('admin.profile*') ? 'active' : '' }}">
+            <i class="bi bi-person-circle me-2"></i>
+            <span>Profile</span>
         </a>
     </li>
 </ul>

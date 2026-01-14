@@ -111,6 +111,41 @@
                                        value="<?php echo e(old('area', $trainer->area ?? '')); ?>"
                                        placeholder="Enter your area (e.g., Petaling Jaya)">
                             </div>
+
+                            <div class="form-group-profile">
+                                <label for="current_password" class="form-label-profile">
+                                    <i class="bi bi-lock me-2"></i>Current Password
+                                </label>
+                                <input type="password" 
+                                       id="current_password" 
+                                       name="current_password" 
+                                       class="form-input-profile" 
+                                       placeholder="Enter current password to change password">
+                                <small class="form-help-text">Leave blank if you don't want to change password</small>
+                            </div>
+
+                            <div class="form-group-profile">
+                                <label for="password" class="form-label-profile">
+                                    <i class="bi bi-key me-2"></i>New Password
+                                </label>
+                                <input type="password" 
+                                       id="password" 
+                                       name="password" 
+                                       class="form-input-profile" 
+                                       placeholder="Enter new password">
+                                <small class="form-help-text">Minimum 8 characters</small>
+                            </div>
+
+                            <div class="form-group-profile">
+                                <label for="password_confirmation" class="form-label-profile">
+                                    <i class="bi bi-key-fill me-2"></i>Confirm New Password
+                                </label>
+                                <input type="password" 
+                                       id="password_confirmation" 
+                                       name="password_confirmation" 
+                                       class="form-input-profile" 
+                                       placeholder="Confirm new password">
+                            </div>
                         </div>
 
                         <!-- Right Column -->

@@ -209,27 +209,5 @@ class CustomerController extends Controller
             ->with('success', 'Thank you for your feedback!');
     }
 
-    /**
-     * Request refund for a booking.
-     */
-    public function requestRefund(Request $request, $id)
-    {
-        $user = Auth::user();
-        $booking = Booking::where('id', $id)
-            ->where('user_id', $user->id)
-            ->where('payment_status', 'paid')
-            ->firstOrFail();
-
-        $request->validate([
-            'refund_reason' => 'required|string|in:trainer_unavailable,service_not_as_described,cancelled_by_customer,technical_issues,other',
-            'refund_details' => 'required|string|min:10|max:1000',
-        ]);
-
-        // TODO: Implement refund request functionality (store request, notify admin, process refund)
-        // For now, just return success message
-        
-        return redirect()->route('customer.bookings')
-            ->with('success', 'Refund request submitted successfully! We will review your request and get back to you soon.');
-    }
 }
 

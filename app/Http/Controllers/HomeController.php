@@ -42,9 +42,22 @@ class HomeController extends Controller
             $query->where('state', $request->state);
         }
 
-        // Filter by area
-        if ($request->has('area') && $request->area) {
-            $query->where('area', 'like', '%' . $request->area . '%');
+        // Filter by price range
+        if ($request->has('price_range') && $request->price_range) {
+            switch ($request->price_range) {
+                case 'below_100':
+                    $query->where('salary', '<', 100);
+                    break;
+                case '100_300':
+                    $query->where('salary', '>=', 100)->where('salary', '<=', 300);
+                    break;
+                case '300_500':
+                    $query->where('salary', '>=', 300)->where('salary', '<=', 500);
+                    break;
+                case 'above_500':
+                    $query->where('salary', '>', 500);
+                    break;
+            }
         }
 
         // Filter by availability day
