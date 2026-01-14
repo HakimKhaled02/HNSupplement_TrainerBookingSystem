@@ -317,11 +317,15 @@ class TrainerController extends Controller
             return false;
         }
 
-        // Check if trainer has any active/incomplete bookings
-        // A booking is incomplete if it's paid and the end_date hasn't passed yet
+        // Check if trainer has any incomplete bookings
+        // A booking is incomplete if it's paid and progress is not 'completed'
+        // Only paid bookings that are not completed block availability updates
         $incompleteBookings = \App\Booking::where('trainer_id', $trainer->id)
             ->where('payment_status', 'paid')
-            ->where('end_date', '>=', now()->toDateString())
+            ->where(function($query) {
+                $query->where('progress', '!=', 'completed')
+                      ->orWhereNull('progress');
+            })
             ->exists();
 
         // Trainer can set availability only if there are NO incomplete bookings

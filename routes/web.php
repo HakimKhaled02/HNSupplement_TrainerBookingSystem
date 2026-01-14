@@ -27,6 +27,12 @@ Route::post('/signup', [AuthController::class, 'signup'])->name('signup.post');
 Route::get('/trainer/signup', [AuthController::class, 'showTrainerSignup'])->name('trainer.signup');
 Route::post('/trainer/signup', [AuthController::class, 'trainerSignup'])->name('trainer.signup.post');
 
+// Password Reset Routes
+Route::get('/password/forgot', [AuthController::class, 'showForgotPassword'])->name('password.forgot');
+Route::post('/password/forgot', [AuthController::class, 'sendPasswordReset'])->name('password.forgot.post');
+Route::get('/password/reset/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset.post');
+
 // Admin Routes
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.post');

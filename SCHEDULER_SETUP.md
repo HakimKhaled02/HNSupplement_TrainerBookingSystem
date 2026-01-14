@@ -74,6 +74,7 @@ You can use tools like NSSM (Non-Sucking Service Manager) to run the scheduler a
 
 Make sure your `.env` file has mail settings configured:
 
+
 ```env
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com

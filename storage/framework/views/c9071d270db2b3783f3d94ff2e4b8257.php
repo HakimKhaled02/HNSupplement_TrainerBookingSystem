@@ -1,57 +1,40 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Sign Up - Book Your Trainer'); ?>
 
-@section('title', 'Login - Book Your Trainer')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="auth-container">
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="auth-header">
-                <h2 class="auth-title">Login</h2>
-                <p class="auth-subtitle">Welcome back! Please login to your account.</p>
+                <h2 class="auth-title">Sign Up</h2>
+                <p class="auth-subtitle">Create your account to start booking trainers.</p>
             </div>
 
-            @if(session('success'))
-                <div class="alert alert-success" style="background: rgba(0, 204, 102, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('info'))
-                <div class="alert alert-info" style="background: rgba(0, 123, 255, 0.1); border: 1px solid #007bff; color: #007bff; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
-                    {{ session('info') }}
-                </div>
-            @endif
-
-            @if ($errors->any())
+            <?php if($errors->any()): ?>
                 <div class="alert alert-danger" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #ff6b6b; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
                     <ul style="margin: 0; padding-left: 20px;">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <form class="auth-form" method="POST" action="{{ route('login.post') }}">
-                @csrf
+            <form class="auth-form" method="POST" action="<?php echo e(route('signup.post')); ?>">
+                <?php echo csrf_field(); ?>
                 
                 <div class="form-group">
-                    <label for="role" class="form-label" style="text-align: center; display: block;">
-                        Login As
+                    <label for="name" class="form-label">
+                        <i class="bi bi-person me-2"></i>Full Name
                     </label>
-                    <div class="role-selector">
-                        <label class="role-option {{ old('role', 'customer') === 'customer' ? 'selected' : '' }}">
-                            <input type="radio" name="role" value="customer" {{ old('role', 'customer') === 'customer' ? 'checked' : '' }} required>
-                            <span class="radio-custom"></span>
-                            <span class="role-text">Customer</span>
-                        </label>
-                        <label class="role-option {{ old('role') === 'trainer' ? 'selected' : '' }}">
-                            <input type="radio" name="role" value="trainer" {{ old('role') === 'trainer' ? 'checked' : '' }} required>
-                            <span class="radio-custom"></span>
-                            <span class="role-text">Trainer</span>
-                        </label>
-                    </div>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input" 
+                        placeholder="Enter your full name"
+                        required
+                        autofocus
+                    >
                 </div>
 
                 <div class="form-group">
@@ -64,9 +47,7 @@
                         name="email" 
                         class="form-input" 
                         placeholder="Enter your email"
-                        value="{{ old('email') }}"
                         required
-                        autofocus
                     >
                 </div>
 
@@ -80,7 +61,7 @@
                             id="password" 
                             name="password" 
                             class="form-input" 
-                            placeholder="Enter your password"
+                            placeholder="Create a password"
                             required
                         >
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
@@ -89,21 +70,40 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="password_confirmation" class="form-label">
+                        <i class="bi bi-lock-fill me-2"></i>Confirm Password
+                    </label>
+                    <div class="password-input-wrapper">
+                        <input 
+                            type="password" 
+                            id="password_confirmation" 
+                            name="password_confirmation" 
+                            class="form-input" 
+                            placeholder="Confirm your password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">
+                            <i class="bi bi-eye" id="password_confirmation-toggle-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="form-options">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="remember">
-                        <span>Remember me</span>
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="#" class="inline-link">Terms & Conditions</a></span>
                     </label>
-                    <a href="{{ route('password.forgot') }}" class="forgot-link">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="auth-button">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    <i class="bi bi-person-plus me-2"></i>Create Account
                 </button>
             </form>
 
             <div class="auth-footer">
-                <p>Don't have an account? <a href="{{ route('signup') }}" class="auth-link">Sign up here</a></p>
+                <p>Already have an account? <a href="<?php echo e(route('login')); ?>" class="auth-link">Login here</a></p>
+                <p style="margin-top: 10px;">Interested in becoming a trainer? <a href="<?php echo e(route('trainer.signup')); ?>" class="auth-link">Register as Trainer</a></p>
             </div>
         </div>
     </div>
@@ -117,7 +117,7 @@
     justify-content: center;
     padding: 100px 20px 80px;
     position: relative;
-    background-image: url('{{ asset('images/homepage.jpg') }}');
+    background-image: url('<?php echo e(asset('images/homepage.jpg')); ?>');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -214,130 +214,41 @@
     color: #666666;
 }
 
-.role-selector {
-    display: flex;
-    gap: 30px;
-    margin-top: 8px;
-    justify-content: center;
-    align-items: center;
-}
-
-.role-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-    position: relative;
-    padding: 10px;
-}
-
-.role-option input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: 0;
-    height: 0;
-}
-
-.radio-custom {
-    width: 24px;
-    height: 24px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    background: transparent;
-    position: relative;
-    transition: all 0.3s ease;
-    display: block;
-}
-
-.radio-custom::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #00a050;
-    transition: transform 0.3s ease;
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom {
-    border-color: #00a050;
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom::after {
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.role-option input[type="radio"]:checked ~ .role-text {
-    color: #00a050;
-    font-weight: 600;
-}
-
-.role-text {
-    pointer-events: none;
-    transition: all 0.3s ease;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-.role-option:hover .radio-custom {
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.1);
-}
-
-.role-option:hover .role-text {
-    color: rgba(255, 255, 255, 1);
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom:hover {
-    border-color: #00cc66;
-    transform: scale(1.1);
-}
-
-.role-option input[type="radio"]:checked ~ .role-text:hover {
-    color: #00cc66;
-}
-
 .form-options {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     margin-bottom: 25px;
     font-size: 0.9rem;
 }
 
 .checkbox-label {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     color: #cccccc;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
+    line-height: 1.5;
 }
 
 .checkbox-label input[type="checkbox"] {
     margin-right: 8px;
+    margin-top: 3px;
     width: 18px;
     height: 18px;
     cursor: pointer;
     accent-color: var(--accent-green);
+    flex-shrink: 0;
 }
 
-.forgot-link {
+.inline-link {
     color: var(--accent-green);
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
 }
 
-.forgot-link:hover {
+.inline-link:hover {
     color: var(--accent-green-light);
     text-decoration: underline;
 }
@@ -449,5 +360,7 @@ function togglePassword(inputId) {
     }
 }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\hnsupplement\resources\views/auth/signup.blade.php ENDPATH**/ ?>

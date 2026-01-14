@@ -1,27 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Login - Book Your Trainer')
+@section('title', 'Reset Password - Book Your Trainer')
 
 @section('content')
 <div class="auth-container">
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="auth-header">
-                <h2 class="auth-title">Login</h2>
-                <p class="auth-subtitle">Welcome back! Please login to your account.</p>
+                <h2 class="auth-title">Reset Password</h2>
+                <p class="auth-subtitle">Enter your new password below.</p>
             </div>
-
-            @if(session('success'))
-                <div class="alert alert-success" style="background: rgba(0, 204, 102, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('info'))
-                <div class="alert alert-info" style="background: rgba(0, 123, 255, 0.1); border: 1px solid #007bff; color: #007bff; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
-                    {{ session('info') }}
-                </div>
-            @endif
 
             @if ($errors->any())
                 <div class="alert alert-danger" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #ff6b6b; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
@@ -33,26 +21,10 @@
                 </div>
             @endif
 
-            <form class="auth-form" method="POST" action="{{ route('login.post') }}">
+            <form class="auth-form" method="POST" action="{{ route('password.reset.post') }}">
                 @csrf
                 
-                <div class="form-group">
-                    <label for="role" class="form-label" style="text-align: center; display: block;">
-                        Login As
-                    </label>
-                    <div class="role-selector">
-                        <label class="role-option {{ old('role', 'customer') === 'customer' ? 'selected' : '' }}">
-                            <input type="radio" name="role" value="customer" {{ old('role', 'customer') === 'customer' ? 'checked' : '' }} required>
-                            <span class="radio-custom"></span>
-                            <span class="role-text">Customer</span>
-                        </label>
-                        <label class="role-option {{ old('role') === 'trainer' ? 'selected' : '' }}">
-                            <input type="radio" name="role" value="trainer" {{ old('role') === 'trainer' ? 'checked' : '' }} required>
-                            <span class="radio-custom"></span>
-                            <span class="role-text">Trainer</span>
-                        </label>
-                    </div>
-                </div>
+                <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="form-group">
                     <label for="email" class="form-label">
@@ -72,7 +44,7 @@
 
                 <div class="form-group">
                     <label for="password" class="form-label">
-                        <i class="bi bi-lock me-2"></i>Password
+                        <i class="bi bi-lock me-2"></i>New Password
                     </label>
                     <div class="password-input-wrapper">
                         <input 
@@ -80,7 +52,7 @@
                             id="password" 
                             name="password" 
                             class="form-input" 
-                            placeholder="Enter your password"
+                            placeholder="Enter new password (min 8 characters)"
                             required
                         >
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
@@ -89,21 +61,32 @@
                     </div>
                 </div>
 
-                <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="remember">
-                        <span>Remember me</span>
+                <div class="form-group">
+                    <label for="password_confirmation" class="form-label">
+                        <i class="bi bi-lock-fill me-2"></i>Confirm New Password
                     </label>
-                    <a href="{{ route('password.forgot') }}" class="forgot-link">Forgot password?</a>
+                    <div class="password-input-wrapper">
+                        <input 
+                            type="password" 
+                            id="password_confirmation" 
+                            name="password_confirmation" 
+                            class="form-input" 
+                            placeholder="Confirm new password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">
+                            <i class="bi bi-eye" id="password_confirmation-toggle-icon"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="auth-button">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    <i class="bi bi-check-circle me-2"></i>Reset Password
                 </button>
             </form>
 
             <div class="auth-footer">
-                <p>Don't have an account? <a href="{{ route('signup') }}" class="auth-link">Sign up here</a></p>
+                <p>Remember your password? <a href="{{ route('login') }}" class="auth-link">Login here</a></p>
             </div>
         </div>
     </div>
@@ -214,185 +197,6 @@
     color: #666666;
 }
 
-.role-selector {
-    display: flex;
-    gap: 30px;
-    margin-top: 8px;
-    justify-content: center;
-    align-items: center;
-}
-
-.role-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-    position: relative;
-    padding: 10px;
-}
-
-.role-option input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: 0;
-    height: 0;
-}
-
-.radio-custom {
-    width: 24px;
-    height: 24px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    background: transparent;
-    position: relative;
-    transition: all 0.3s ease;
-    display: block;
-}
-
-.radio-custom::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #00a050;
-    transition: transform 0.3s ease;
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom {
-    border-color: #00a050;
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom::after {
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.role-option input[type="radio"]:checked ~ .role-text {
-    color: #00a050;
-    font-weight: 600;
-}
-
-.role-text {
-    pointer-events: none;
-    transition: all 0.3s ease;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-.role-option:hover .radio-custom {
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.1);
-}
-
-.role-option:hover .role-text {
-    color: rgba(255, 255, 255, 1);
-}
-
-.role-option input[type="radio"]:checked ~ .radio-custom:hover {
-    border-color: #00cc66;
-    transform: scale(1.1);
-}
-
-.role-option input[type="radio"]:checked ~ .role-text:hover {
-    color: #00cc66;
-}
-
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    font-size: 0.9rem;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    color: #cccccc;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-}
-
-.checkbox-label input[type="checkbox"] {
-    margin-right: 8px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--accent-green);
-}
-
-.forgot-link {
-    color: var(--accent-green);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-}
-
-.forgot-link:hover {
-    color: var(--accent-green-light);
-    text-decoration: underline;
-}
-
-.auth-button {
-    width: 100%;
-    padding: 16px;
-    background: var(--accent-green);
-    color: #000000;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-}
-
-.auth-button:hover {
-    background: var(--accent-green-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 204, 102, 0.4);
-}
-
-
-.auth-footer {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.auth-footer p {
-    color: #cccccc;
-    font-size: 0.95rem;
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-}
-
-.auth-link {
-    color: var(--accent-green);
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.auth-link:hover {
-    color: var(--accent-green-light);
-    text-decoration: underline;
-}
-
 .password-input-wrapper {
     position: relative;
 }
@@ -420,6 +224,56 @@
 
 .password-toggle i {
     font-size: 1.2rem;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent-green);
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.auth-button:hover {
+    background: var(--accent-green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 204, 102, 0.4);
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-footer p {
+    color: #cccccc;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+}
+
+.auth-link {
+    color: var(--accent-green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.auth-link:hover {
+    color: var(--accent-green-light);
+    text-decoration: underline;
 }
 
 @media (max-width: 576px) {
