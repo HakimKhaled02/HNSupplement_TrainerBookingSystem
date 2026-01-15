@@ -56,6 +56,21 @@ In the build logs, you should see:
 - ✅ Composer installing dependencies
 - ✅ Build completing successfully
 
+## New Error: "npm: command not found"
+
+If you see this error after fixing the PHP issue, it means Node.js isn't installed. **This is now fixed!**
+
+✅ Updated `nixpacks.toml` to include Node.js 20
+✅ Added npm install and build commands
+✅ Created `.nvmrc` file for Node version
+
+Just commit and push again:
+```bash
+git add .
+git commit -m "Add Node.js support for Vite build"
+git push origin main
+```
+
 ## If It Still Fails
 
 If you still see the PHP 8.1 error:
