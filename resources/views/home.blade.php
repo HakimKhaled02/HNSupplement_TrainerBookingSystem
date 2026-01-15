@@ -12,7 +12,7 @@
             <p class="hero-description">
                 Find certified personal trainers near you<br>and achieve your fitness goals with personalized training programs.
             </p>
-            <a href="{{ route('login') }}" class="btn btn-primary btn-hero">Get Started</a>
+            <a href="{{ route('trainers') }}" class="btn btn-primary btn-hero">Get Started</a>
         </div>
     </section>
 

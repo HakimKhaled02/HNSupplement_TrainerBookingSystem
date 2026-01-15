@@ -9,7 +9,7 @@ use App\Http\Controllers\CustomerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/trainers', [HomeController::class, 'trainers'])->name('trainers');
-Route::get('/trainer/{id}/book', [HomeController::class, 'bookTrainer'])->name('trainer.book');
+Route::get('/trainer/{id}/book', [HomeController::class, 'bookTrainer'])->name('trainer.book')->middleware('auth');
 Route::get('/trainer/{id}/check-availability', [HomeController::class, 'checkAvailability'])->name('trainer.check-availability');
 Route::get('/booking', function() {
     return redirect()->route('trainers')->with('info', 'Please select a trainer to book.');

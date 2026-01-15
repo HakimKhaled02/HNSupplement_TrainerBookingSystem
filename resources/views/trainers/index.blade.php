@@ -13,7 +13,7 @@
                         <h3 class="trainers-filters-title">
                             <i class="bi bi-funnel me-2"></i>Filters
                         </h3>
-                        @if(request()->anyFilled(['category', 'state', 'price_range', 'availability_day', 'min_rating', 'user_lat', 'user_lng', 'radius']))
+                        @if(request()->anyFilled(['category', 'state', 'price_range', 'availability_day', 'rating_range', 'user_lat', 'user_lng', 'radius']))
                             <a href="{{ route('trainers') }}" class="trainers-clear-filters">
                                 <i class="bi bi-x-circle me-1"></i>Clear All
                             </a>
@@ -75,13 +75,14 @@
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">Min Rating</label>
-                            <select name="min_rating" class="filter-select">
-                                <option value="">Any Rating</option>
-                                <option value="4.5" {{ request('min_rating') == '4.5' ? 'selected' : '' }}>4.5+ Stars</option>
-                                <option value="4.0" {{ request('min_rating') == '4.0' ? 'selected' : '' }}>4.0+ Stars</option>
-                                <option value="3.5" {{ request('min_rating') == '3.5' ? 'selected' : '' }}>3.5+ Stars</option>
-                                <option value="3.0" {{ request('min_rating') == '3.0' ? 'selected' : '' }}>3.0+ Stars</option>
+                            <label class="filter-label">Rating</label>
+                            <select name="rating_range" class="filter-select">
+                                <option value="">All Ratings</option>
+                                <option value="above_4.5" {{ request('rating_range') == 'above_4.5' ? 'selected' : '' }}>Above 4.5</option>
+                                <option value="4.0_4.5" {{ request('rating_range') == '4.0_4.5' ? 'selected' : '' }}>4.0 - 4.5</option>
+                                <option value="3.5_4.0" {{ request('rating_range') == '3.5_4.0' ? 'selected' : '' }}>3.5 - 4.0</option>
+                                <option value="3.0_3.5" {{ request('rating_range') == '3.0_3.5' ? 'selected' : '' }}>3.0 - 3.5</option>
+                                <option value="below_3.0" {{ request('rating_range') == 'below_3.0' ? 'selected' : '' }}>Below 3.0</option>
                             </select>
                         </div>
                         <button type="submit" class="filter-submit-btn">
@@ -103,7 +104,6 @@
                         <input type="hidden" id="user-latitude" name="user_lat" value="{{ $userLat ?? '' }}">
                         <input type="hidden" id="user-longitude" name="user_lng" value="{{ $userLng ?? '' }}">
                     </div>
-                    @if(isset($userLat) && isset($userLng))
                     <div class="trainers-radius-control">
                         <label for="radius-filter" class="radius-label">Search Radius:</label>
                         <select id="radius-filter" name="radius" class="radius-select" onchange="updateRadius()">
@@ -114,7 +114,6 @@
                             <option value="50" {{ ($radius ?? '') == '50' ? 'selected' : '' }}>50 km</option>
                         </select>
                     </div>
-                    @endif
                 </div>
 
                 <!-- Results Count -->
@@ -266,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const url = new URL(window.location.href);
                 url.searchParams.set('user_lat', lat);
                 url.searchParams.set('user_lng', lng);
-                // Preserve all existing filter parameters (category, state, price_range, availability_day, min_rating, radius)
+                // Preserve all existing filter parameters (category, state, price_range, availability_day, rating_range, radius)
                 window.location.href = url.toString();
             },
             function(error) {
@@ -296,13 +295,23 @@ document.addEventListener('DOMContentLoaded', function() {
     window.updateRadius = function() {
         const radiusSelect = document.getElementById('radius-filter');
         const radiusValue = radiusSelect.value;
+        const userLat = document.getElementById('user-latitude').value;
+        const userLng = document.getElementById('user-longitude').value;
+        
+        // If radius is selected but no location, prompt user to find location first
+        if (radiusValue && (!userLat || !userLng)) {
+            alert('Please click "Find Nearest Trainer" first to detect your location before setting a search radius.');
+            radiusSelect.value = '';
+            return;
+        }
+        
         const url = new URL(window.location.href);
         if (radiusValue) {
             url.searchParams.set('radius', radiusValue);
         } else {
             url.searchParams.delete('radius');
         }
-        // Preserve all existing filter parameters (category, state, price_range, availability_day, min_rating, user_lat, user_lng)
+        // Preserve all existing filter parameters (category, state, price_range, availability_day, rating_range, user_lat, user_lng)
         window.location.href = url.toString();
     };
 });

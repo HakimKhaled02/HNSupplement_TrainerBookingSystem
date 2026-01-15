@@ -12,7 +12,7 @@
             <p class="hero-description">
                 Find certified personal trainers near you<br>and achieve your fitness goals with personalized training programs.
             </p>
-            <a href="<?php echo e(route('login')); ?>" class="btn btn-primary btn-hero">Get Started</a>
+            <a href="<?php echo e(route('trainers')); ?>" class="btn btn-primary btn-hero">Get Started</a>
         </div>
     </section>
 

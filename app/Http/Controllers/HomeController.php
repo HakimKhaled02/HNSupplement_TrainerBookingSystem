@@ -65,9 +65,25 @@ class HomeController extends Controller
             $query->where('availability', 'like', '%"day":"' . $request->availability_day . '"%');
         }
 
-        // Filter by minimum rating
-        if ($request->has('min_rating') && $request->min_rating) {
-            $query->where('rating', '>=', $request->min_rating);
+        // Filter by rating range
+        if ($request->has('rating_range') && $request->rating_range) {
+            switch ($request->rating_range) {
+                case 'above_4.5':
+                    $query->where('rating', '>', 4.5);
+                    break;
+                case '4.0_4.5':
+                    $query->where('rating', '>=', 4.0)->where('rating', '<=', 4.5);
+                    break;
+                case '3.5_4.0':
+                    $query->where('rating', '>=', 3.5)->where('rating', '<', 4.0);
+                    break;
+                case '3.0_3.5':
+                    $query->where('rating', '>=', 3.0)->where('rating', '<', 3.5);
+                    break;
+                case 'below_3.0':
+                    $query->where('rating', '<', 3.0);
+                    break;
+            }
         }
 
         $trainers = $query->orderBy('rating', 'desc')
