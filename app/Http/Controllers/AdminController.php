@@ -14,6 +14,7 @@ use App\Booking;
 use App\Mail\TrainerApprovedMail;
 use App\Mail\TrainerRejectedMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -142,9 +143,33 @@ class AdminController extends Controller
         $trainer->user->save();
 
         // Send email with login credentials
-        Mail::to($trainer->user->email)->send(new TrainerApprovedMail($trainer->user, $temporaryPassword));
+        $mailMailer = env('MAIL_MAILER');
+        $emailSent = false;
+        $emailError = null;
 
-        return redirect()->route('admin.approvals')->with('success', 'Trainer approved and email sent successfully!');
+        if ($mailMailer) {
+            try {
+                Mail::to($trainer->user->email)->send(new TrainerApprovedMail($trainer->user, $temporaryPassword));
+                $emailSent = true;
+            } catch (\TypeError $e) {
+                Log::warning('Mail configuration error when sending trainer approval email: ' . $e->getMessage());
+                $emailError = 'Mail configuration error. Trainer approved but email could not be sent.';
+            } catch (\Exception $e) {
+                Log::error('Failed to send trainer approval email: ' . $e->getMessage());
+                $emailError = 'Failed to send email. Trainer approved but email could not be sent.';
+            }
+        } else {
+            Log::warning('Mail not configured. Trainer approved but email was not sent.');
+            $emailError = 'Mail not configured. Trainer approved but email was not sent.';
+        }
+
+        if ($emailSent) {
+            return redirect()->route('admin.approvals')->with('success', 'Trainer approved and email sent successfully!');
+        } else {
+            return redirect()->route('admin.approvals')
+                ->with('success', 'Trainer approved successfully!')
+                ->with('warning', $emailError . ' Temporary password: ' . $temporaryPassword);
+        }
     }
 
     /**
@@ -168,9 +193,33 @@ class AdminController extends Controller
         $trainer->save();
 
         // Send rejection email
-        Mail::to($trainer->user->email)->send(new TrainerRejectedMail($trainer->user));
+        $mailMailer = env('MAIL_MAILER');
+        $emailSent = false;
+        $emailError = null;
 
-        return redirect()->route('admin.approvals')->with('success', 'Trainer rejected and email sent successfully.');
+        if ($mailMailer) {
+            try {
+                Mail::to($trainer->user->email)->send(new TrainerRejectedMail($trainer->user));
+                $emailSent = true;
+            } catch (\TypeError $e) {
+                Log::warning('Mail configuration error when sending trainer rejection email: ' . $e->getMessage());
+                $emailError = 'Mail configuration error. Trainer rejected but email could not be sent.';
+            } catch (\Exception $e) {
+                Log::error('Failed to send trainer rejection email: ' . $e->getMessage());
+                $emailError = 'Failed to send email. Trainer rejected but email could not be sent.';
+            }
+        } else {
+            Log::warning('Mail not configured. Trainer rejected but email was not sent.');
+            $emailError = 'Mail not configured. Trainer rejected but email was not sent.';
+        }
+
+        if ($emailSent) {
+            return redirect()->route('admin.approvals')->with('success', 'Trainer rejected and email sent successfully.');
+        } else {
+            return redirect()->route('admin.approvals')
+                ->with('success', 'Trainer rejected successfully.')
+                ->with('warning', $emailError);
+        }
     }
 
     /**
